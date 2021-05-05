@@ -1,0 +1,22 @@
+.Container {
+  height: 100%;
+  width: 100%;
+  padding: .5% 1%;
+  background: var(--Color-Background-1);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 4rem 17.5% 2.5% auto;
+  grid-template-areas: 'Servers Channels . Content';
+}
+@media (max-width: 700px) {
+  .Container {
+    padding: 0;
+    grid-template-columns: 4rem calc(100% - 4rem) 100%;
+    grid-template-areas: 'Servers Channels Content';
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+  .Container > * {
+    scroll-snap-align: start;
+  }
+}

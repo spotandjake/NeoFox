@@ -1,0 +1,56 @@
+[data-theme="light"] {
+  --Theme: 1;
+  
+  --Color-Background-1: #F7FAFF;
+  --Color-Background-2: #FFFFFF;
+  --Color-Background-3: #eee;
+  --Color-Background-4: #2CAEFF;
+  --Color-Background-5: #ddd;
+  --Color-Background-6: #eee;
+
+  --Color-Foreground-1: #000;
+  --Color-Foreground-2: #2CAEFF;
+  --Color-Foreground-3: #25A0D9;
+  
+  --Color-Text-1: #141414;
+  --Color-Text-2: #000;
+  --Color-Text-3: #000;
+
+  // Component Colors 
+  --Color-Background-Servers: #2CAEFF;
+  --Color-Background-Login-Btn: #4285F4;
+  --Color-Background-Login-Btn-Hover: #4285F4cc;
+  --Color-Text-Login-Btn: #fff;
+
+  .hljs-keyword,.hljs-selector-tag,.hljs-built_in,
+  .hljs-name,.hljs-tag {
+    color: #00f;
+  }
+  .hljs-string,.hljs-title,.hljs-section,.hljs-attribute,.hljs-literal,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-addition {
+    color: #a31515;
+  }
+  .hljs-deletion,.hljs-selector-attr,.hljs-selector-pseudo,.hljs-meta {
+    color: #2b91af;
+  }
+  .hljs-doctag {
+    color: #808080;
+  }
+  .hljs-attr {
+    color: #f00;
+  }
+
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-link {
+    color: #00b0e8;
+  }
+
+
+  .hljs-emphasis {
+    font-style: italic;
+  }
+
+  .hljs-strong {
+    font-weight: bold;
+  }
+}

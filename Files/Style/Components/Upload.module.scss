@@ -1,0 +1,11 @@
+.Icon {
+  padding: .75rem;
+  padding-right: 0;
+  cursor: pointer;
+  &:hover {
+    filter: grayscale(1);
+  }
+  &> input {
+    display: none;
+  }
+}

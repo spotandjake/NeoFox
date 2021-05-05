@@ -1,0 +1,10 @@
+@use './../Mixins';
+.Container {
+  height: 100%;
+  width: 100%;
+  border-radius: .5rem 0 0 .5rem;
+  background: var(--Color-Background-Servers);
+  grid-area: Servers;
+  display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(4rem, auto)) [last-line] 4rem;;
+}

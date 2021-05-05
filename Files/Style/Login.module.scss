@@ -1,0 +1,50 @@
+@use 'sass:math';
+
+.Container, .circles {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: var(--Color-Background-3);
+}
+.Container > section {
+  height: 20rem;
+  width: 20rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  position: absolute;
+  top: calc(50% - 10rem);
+  left: calc(50% - 10rem);
+  background: var(--Color-Background-2);
+}
+.circles div {
+  position: absolute;
+  overflow: hidden;
+  background: var(--Color-Background-1);
+  bottom: -20%;
+  border-radius: 25%;
+  user-select: none;
+  will-change: transform;
+  animation: animate 25s linear infinite;
+
+  @for $i from 1 to 10 {
+    &:nth-child(#{$i}) {
+      $size: math.random(10) * 1rem;
+      height: $size;
+      width: $size;
+      left: $i * 10%;
+      animation-duration: math.random(25) * 1s;
+      animation-delay: math.random(7) * 1s;
+    }
+  }
+}
+@keyframes animate {
+  0%{
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100%{
+    transform: translateY(-120vh) rotate(720deg);
+    opacity: 0;
+  }
+}

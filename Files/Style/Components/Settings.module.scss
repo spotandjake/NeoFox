@@ -1,0 +1,163 @@
+@use './../Mixins';
+
+.Container {
+  grid-area: Channels / Channels / Content / Content;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0 .5rem .5rem 0;
+  background: var(--Color-Background-2);
+
+  grid-template-rows: max-content auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: .5rem;
+  grid-template-areas: 
+    'Title Title'
+    'Prefs Servers'
+  ;
+  transform-origin: 0 50%;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
+  animation: animate .25s linear;
+  > h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: var(--Color-Text-3);
+    grid-area: Title;
+  }
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+@media (max-width: 700px) {
+  .Container {
+    overflow-y: scroll;
+    grid-area: Channels;
+    grid-template-columns: 100%;
+    grid-template-rows: max-content max-content 100vh;
+    grid-gap: 0;
+    grid-template-areas: 
+      'Title'
+      'Prefs'
+      'Servers'
+    ;
+  }
+  .Container > * {
+    scroll-snap-align: start;
+  }
+}
+@keyframes animate {
+  0%{
+    transform: scaleX(0);
+  }
+  100%{
+    transform: scaleX(1);
+  }
+}
+/* Servers */
+.Servers {
+  display: grid;
+  grid-template-rows: max-content auto;
+  > div {
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    background: var(--Color-Background-6);
+    .Server {
+      display: flex;
+      height: 3rem;
+      padding: .5rem;
+      border-radius: 1rem;
+      background: var(--Color-Background-1);
+      img, picture {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 50%;
+      }
+      h1 {
+        margin: 0;
+        margin-left: 1rem;
+        font-size: 1rem;
+        line-height: 2;
+      }
+    }
+  }
+}
+/* cards */
+.Card  {
+  display: flex;
+  height: 3rem;
+  padding: .5rem;
+  margin-bottom: .5rem;
+  border-radius: 1rem;
+  background: var(--Color-Background-6);
+  &> h1 {
+    overflow: hidden;
+    font-size: 1.75rem;
+    margin: 0;
+    margin-left: 1rem;
+    user-select: none;
+  }
+  img, picture {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+  }
+  .Center {
+    text-align: center;
+    width: 100%;
+  }
+}
+.Switch {
+  position: relative;
+  display: inline-block;
+  width: 4rem;
+  height: 2rem;
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    &:checked + span {
+      background-color: var(--Color-Foreground-2);
+      &:before {
+        background-color: var(--Color-Background-1);
+        transform: translateX(2rem);
+      }
+    }
+  }
+  span {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--Color-Background-1);
+    border-radius: 1rem;
+    transition: .4s;
+    &:before {
+      position: absolute;
+      content: "";
+      height: 1.8rem;
+      width: 1.8rem;
+      left: .1rem;
+      bottom: .1rem;
+      border-radius: 50%;
+      background-color: var(--Color-Foreground-2);
+      transition: .4s;
+    }
+  }
+}
+// Buttons
+.Button {
+  @include Mixins.Button(
+    var(--Color-Background-6),
+    var(--Color-Text-4),
+    var(--Color-Background-3)
+  );
+  margin: 0;
+  width: 100%;
+  margin-bottom: .5rem;
+}

@@ -1,0 +1,30 @@
+.Container {
+  height: 4rem;
+  width: 4rem;
+
+  position: relative;
+}
+.Self {
+  grid-row: last-line;
+}
+.Active {
+  width: .3rem;
+  height: 2rem;
+  position: absolute;
+  top: calc(25% - .1rem);
+  bottom: 0;
+  border-radius: 0 .5rem .5rem 0;
+  background: var(--Color-Foreground-1);
+}
+.Icon_IMG {
+  margin: .375rem;
+  border-radius: 50%;
+  &:hover {
+    border-radius: 45%;
+    opacity: 75%;
+  }
+}
+.Icon_IMG, .Icon {
+  height: 3.25rem;
+  width: 3.25rem;
+}

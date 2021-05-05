@@ -1,0 +1,106 @@
+import React from 'react';
+import styles from './../../Style/Components/Markdown.module.scss';
+import Markdown from '../../Scripts/Markdown_Standard';
+import Prism, { Token, TokenStream } from 'prismjs';
+import hljs from '../../Scripts/hljs';
+import { Image } from './Preview';
+// Function
+type MyProps = { MD: string };
+let Marked = (props: MyProps) => {
+  let Tokens: TokenStream = Prism.tokenize(
+    props.MD, 
+    Markdown
+  );
+  let Output: any = [];
+  Tokens.forEach((Token: Token | string, i) => {
+    if (!Token) return;
+    let Convert = ({ content }: any) => {
+      if (typeof content == 'string') return { Text: content, Type: '' };
+      let Text: string = '', Output: any = { language: '', Type: '', Url: '' };
+      content.forEach((Part: any) => {
+        if (typeof Part == 'string') {
+          Text += Part;
+        } else if (Part.type == 'language') {
+          Output['language'] = Part.content.trim();
+        } else if (Part.type == 'Type') {
+          Output['Type'] = Part.content;
+        } else if (Part.type == 'Url') {
+          Output['Url'] = Part.content;
+        }
+      });
+      return { Text, Output };
+    }
+    if (typeof Token == 'string') {
+      Output.push(<p key={i}>{Token}</p>);
+    } else {
+      switch(Token.type) {
+        case 'bold':
+          Output.push(<strong key={i}>{Convert(Token).Text}</strong>);
+          break;
+        case 'italic':
+          Output.push(<em key={i}>{Convert(Token).Text}</em>);
+          break;
+        case 'strikethrough':
+          Output.push(<del key={i}>{Convert(Token).Text}</del>);
+          break;
+        case 'underline':
+          Output.push(<ins key={i}>{Convert(Token).Text}</ins>);
+          break;
+        case 'code':
+          Output.push(<code key={i}>{Convert(Token).Text}</code>);
+          break;
+        case 'blockquote':
+          Output.push(<blockquote key={i} className={styles.blockqoute}>{Convert(Token).Text}</blockquote>);
+          break;
+        case 'url':
+          let { Type:Title, Url:Href } = Convert(Token).Output;
+          try {
+            Href = encodeURI(Href.replace('javascript:','')).replace(/%25/g, '%');
+          } catch (e) { Href = ''; }
+          if (Href == '') Output.push(<p key={i}>{Title}</p>);
+          else Output.push(<a key={i} href={Href}>{Title}</a>);
+          break;
+        case 'url-reference':
+          let { Type, Url } = Convert(Token).Output;
+          try {
+            Url = encodeURI(Url.replace('javascript:','')).replace(/%25/g, '%');
+          } catch (e) { Url = ''; }
+          if (Url == '') Output.push(<p key={i}>{Type}</p>);
+          else {
+            switch (true) {
+              case /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(Url) || Type == 'Image':
+              default:
+                Output.push(
+                  <Image
+                    key={i}
+                    Url={Url}
+                    alt={Type || ''}
+                  />
+                );
+            }
+          }
+          break;
+        case 'code_block':
+          let Data = Convert(Token), Txt: string = Data.Text.trim();
+          let Highlighted = hljs.getLanguage(Data.Output.language)?hljs.highlight(Txt, { language: Data.Output.language }).value:Txt;
+          Output.push(
+            <pre key={i}><code dangerouslySetInnerHTML={{ __html: Highlighted }}></code></pre>
+          );
+          break;
+        case 'h1':
+          Output.push(<h1 key={i}>{Convert(Token).Text}</h1>);
+          break;
+        case 'h2':
+          Output.push(<h2 key={i}>{Convert(Token).Text}</h2>);
+          break;
+        case 'h3':
+          Output.push(<h3 key={i}>{Convert(Token).Text}</h3>);
+          break;
+      }
+    }
+  })
+  return (<>{Output}</>);
+}
+
+
+export default Marked;

@@ -1,0 +1,62 @@
+.Container {
+  height: max-content;
+  width: max-content;
+  min-width: 20%;
+  max-width: 75%;
+  margin: .5rem;
+  position: relative;
+  .Icon {
+    position: absolute;
+    top: .25rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .Content {
+    height: max-content;
+    min-height: 3rem;
+    margin-left: 1rem;
+    padding: 1rem;
+    padding-left: 2rem;
+    border-radius: 1rem;
+    background: var(--Color-Foreground-2);
+    color: var(--Color-Text-1);
+    overflow: hidden;
+    word-break: break-word;
+    white-space: pre-wrap;
+    p {
+      margin: 0;
+    }
+    * {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .Author {
+    font-size: .75rem;
+    margin-left: 2rem;
+  }
+  &[data-self='false'] {
+    margin: .5rem;
+    margin-left: auto;
+    .Icon {
+      right: 0;
+    }
+    .Content {
+      margin-right: 1rem;
+      padding: 1rem;
+      padding-right: 2rem;
+      background: var(--Color-Foreground-3);
+    }
+  }
+}
+/* Context Menu */
+.Ctx, .Ctx_Item {
+  background: var(--Color-Background-1) !important;
+  border: 1px solid  var(--Color-Background-1) !important;
+}
+.Ctx_Item:hover {
+  background: var(--Color-Background-2) !important;
+  border: 1px solid  var(--Color-Background-2) !important;
+}

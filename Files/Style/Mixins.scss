@@ -1,0 +1,16 @@
+@mixin Button($Color, $Text: invert($Color), $Hover: rgba($Color, 0.9)) {
+  height: 2.25rem;
+  min-height: max-content;
+  width: 90%;
+  padding: .625rem 0;
+  margin: .5rem auto;
+  text-align: center;
+  border-radius: .25rem;
+  user-select: none;
+  cursor: pointer;
+  background: $Color;
+  color: $Text;
+  &:hover {
+    background: $Hover;
+  }
+}

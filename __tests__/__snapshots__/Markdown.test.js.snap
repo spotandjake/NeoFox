@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Markdown--Attachment 1`] = `
+<picture
+  onClick={[Function]}
+>
+  <img
+    alt="Image"
+    height="500"
+    src="htttps://repl.it/"
+  />
+</picture>
+`;
+
+exports[`Markdown--BlockQoute 1`] = `
+<blockquote>
+   Test
+</blockquote>
+`;
+
+exports[`Markdown--Bold 1`] = `
+<strong>
+  Bold
+</strong>
+`;
+
+exports[`Markdown--Codeblock 1`] = `
+<pre>
+  <code
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<span class=\\"hljs-built_in\\">console</span>.log(<span class=\\"hljs-string\\">&#x27;Hello world&#x27;</span>);",
+      }
+    }
+  />
+</pre>
+`;
+
+exports[`Markdown--Header-1 1`] = `
+<h1>
+  h1
+</h1>
+`;
+
+exports[`Markdown--Header-2 1`] = `
+<h2>
+  h2
+</h2>
+`;
+
+exports[`Markdown--Header-3 1`] = `
+<h3>
+  h3
+</h3>
+`;
+
+exports[`Markdown--InlineCode 1`] = `
+<code>
+  Inline
+</code>
+`;
+
+exports[`Markdown--Italic 1`] = `
+<em>
+  console.log('Hello world');
+</em>
+`;
+
+exports[`Markdown--StrikeThrough 1`] = `
+<p>
+  ~~StrikeThrough
+</p>
+`;
+
+exports[`Markdown--Underline 1`] = `
+<ins>
+  Underline
+</ins>
+`;
+
+exports[`Markdown--Url 1`] = `
+<a
+  href="htttps://repl.it/"
+>
+  Repl
+</a>
+`;

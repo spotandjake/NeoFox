@@ -1,0 +1,39 @@
+@use 'sass:math';
+
+.Container {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: var(--Color-Background-3);
+}
+.Container div {
+  position: absolute;
+  overflow: hidden;
+  background: var(--Color-Background-1);
+  bottom: -20%;
+  border-radius: 25%;
+  user-select: none;
+  will-change: transform;
+  animation: animate 25s linear infinite;
+  @for $i from 1 to 10 {
+    &:nth-child(#{$i}) {
+      $size: math.random(10) * 1rem;
+      height: $size;
+      width: $size;
+      left: $i * 10%;
+      animation-duration: math.random(25) * 1s;
+      animation-delay: math.random(7) * 1s;
+    }
+  }
+}
+@keyframes animate {
+  0%{
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100%{
+    transform: translateY(-120vh) rotate(720deg);
+    opacity: 0;
+  }
+}

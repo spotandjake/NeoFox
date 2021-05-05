@@ -1,0 +1,82 @@
+.Container {
+  max-height: 20rem;
+  height: calc(100% - 2rem);
+  width: calc(100% - 2rem);
+  margin: 1rem;
+
+  border-radius: .5rem;
+  border: 2px solid var(--Color-Foreground-2);
+  background: var(--Color-Background-3);
+  overflow-y: auto;
+
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+.textarea {
+  width: 100%;
+  background: var(--Color-Background-3);
+  border: 0;
+  resize: none;
+  &:focus {
+    outline: none;
+  }
+}
+.Slate {
+  padding: .75rem;
+  & * {
+    word-break: break-word;
+  }
+}
+
+/* Editor Styles */
+.h1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.h2 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+.h3 {
+  font-weight: bold;
+  font-size: 1rem;
+}
+.bold {
+  font-weight: bold;
+}
+.italic {
+  font-style: italic;
+}
+.underline {
+  text-decoration: underline;
+}
+.list {
+  padding-left: 10px;
+  font-size: 20px;
+  line-height: 10px;
+}
+.hr {
+  display: block;
+  text-align: center;
+  border-bottom: 2px solid #ddd;
+}
+.blockquote {
+  display: inline-block;
+  border-left: 2px solid #ddd;
+  padding-left: 10px;
+  color: #aaa;
+  font-style: italic;
+}
+.code {
+  width: max-content;
+  padding: 0 .25rem;
+  border-radius: 5px;
+  background: var(--Color-Background-2);
+  scrollbar-color: #666 #201c29;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  line-height: 1.75;
+  font-family: Operator Mono SSm A,Operator Mono SSm B,Source Code Pro,Menlo,Consolas,Monaco,monospace;
+  color: var(--Color-Text-2);
+}

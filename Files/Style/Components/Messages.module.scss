@@ -1,0 +1,6 @@
+.Container {
+  display: flex;
+  flex-direction: column-reverse;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+}

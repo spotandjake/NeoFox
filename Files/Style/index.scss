@@ -1,0 +1,45 @@
+body, html, #__next, .Page {
+  height: 100%;
+  width: 100%;
+
+  margin: 0;
+
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--Color-Text-2);
+  background: var(--Color-Background-1);
+}
+
+* {
+  box-sizing: border-box;
+}
+::-webkit-scrollbar {
+  width: .75rem;
+}
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px #0005;
+}
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+/* Hljs */
+code {
+  font-family: Source Code Pro,Menlo,Consolas,Monaco,monospace;
+  width: max-content;
+  padding: 0 .25rem;
+  border-radius: .25rem;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+  line-height: 1.75;
+  background: var(--Color-Background-2);
+  color: var(--Color-Text-2);
+  box-shadow: 0 1px 1px 0 #002 inset, 0 2px 1px -1px #002 inset, 0 1px 3px 0 #0003 inset;
+}
+pre > code {
+  display: block;
+  min-width: 100px;
+  width: 100%;
+  max-width: 100%;
+  padding: 1.25rem;
+}

@@ -1,0 +1,39 @@
+.Container {
+  height: 100%;
+  width: 100%;
+
+  border-radius: .5rem;
+  background: var(--Color-Background-2);
+
+  grid-area: Content;
+  display: grid;
+  grid-template-rows: 2.5rem auto 1rem minmax(5rem, max-content);
+
+  overflow: hidden;
+}
+
+.Top {
+  display: grid;
+  grid-template-columns: 2rem auto;
+  grid-gap: 1rem;
+  background: var(--Color-Background-4);
+}
+.Icon {
+  margin: .25rem;
+  border-radius: 50%;
+  height: 2rem;
+  width: 2rem;
+  overflow: hidden;
+}
+.Head {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.Typing {
+  padding: 0 1rem;
+  &> span {
+    font-weight: bold;
+  }
+}

@@ -1,0 +1,79 @@
+@use './../Mixins';
+
+.blockqoute {
+  display: inline-block;
+  border-radius: .25rem;
+  min-width: 100%;
+  border-left: .2rem solid var(--Color-Text-2);
+  padding: .25rem;
+  padding-left: .5rem;
+  margin: 0;
+  font-style: italic;
+  color: var(--Color-Text-2);
+  background: var(--Color-Background-2);
+}
+.img {
+  border-radius: .5rem;
+}
+
+// Previews
+.Preview {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #00000080;
+  overflow: hidden;
+
+  align-content: center;
+  &> picture  {
+    display: block !important;
+    height: 75%;
+    width: max-content;
+    max-width: 90%;
+    margin: auto;
+    border-radius: .5rem;
+    overflow: hidden;
+    animation: expand 0.5s ease-in-out;
+    &> img {
+      height: 100%;
+      width: auto;
+    }
+  }
+  &> div {
+    display: grid;
+    height: 60%;
+    width: 60%;
+    max-width: 90%;
+    padding: 1rem;
+    margin: auto;
+    border-radius: .5rem;
+    grid-template-rows: max-content auto max-content;
+    overflow: hidden;
+    animation: expand 0.5s ease-in-out;
+    background: var(--Color-Background-1);
+    &> h1 {
+      width: 100%;
+      text-align: center;
+    }
+    &> textarea {
+      resize: none;
+      width: 90%;
+      height: 90%;
+      min-height: 10rem;
+    }
+    &> button {
+      @include Mixins.Button(#50ABF1, #fff);
+      border: 0;
+    }
+    * {
+      display: block;
+      margin: auto;
+    }
+  }
+}
+@keyframes expand {
+  from { transform: scale(0); }
+}
