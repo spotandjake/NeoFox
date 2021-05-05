@@ -22,6 +22,7 @@ Done
 - [x] Fix BUGBUG comments
 - [x] Fix up the scroll to latest message
 - [x] Add Notifcation Support Still need to test and upload to cloud functions
+- [x] Make A Logo, UI
 Priority
 ====================
 - [ ] Move images off of nextjs and onto a cdn -- Setup Our Own
@@ -34,7 +35,6 @@ Priority
 - [ ] Add Video Calls
 - [ ] Rescale UI
 - [ ] Finalize Light Theme
-- [ ] Make A Logo, UI
 Come Back Too
 ====================
 - [ ] make editor md multiple line capable.
