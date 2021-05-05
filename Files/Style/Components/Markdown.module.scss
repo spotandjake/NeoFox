@@ -74,6 +74,12 @@
     }
   }
 }
+.channel {
+  cursor: pointer;
+  background: #25A0D9;
+  border-radius: .25rem;
+  padding: .1rem;
+}
 @keyframes expand {
   from { transform: scale(0); }
 }

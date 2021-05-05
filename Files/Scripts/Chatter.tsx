@@ -187,6 +187,21 @@ class Chatter_User extends EvtTarget {
     this.dispatchEvent(new Event('ActiveUpdate'));
     this.SetMessageListener();
   }
+  ActiveChannelName (Channel_Name: string) {
+    let Channel_Id: string = "";
+    [...this.Server.Channels.entries()].forEach(([k,v]) => {
+      if (v == Channel_Name) Channel_Id = k;
+    });
+    if (!this.Server.Channels.has(Channel_Id)) return;
+    this.Channel = { 
+      //@ts-ignore
+      Name: this.Server.Channels.get(Channel_Id),
+      Id: Channel_Id
+    }
+    //@ts-ignore
+    this.dispatchEvent(new Event('ActiveUpdate'));
+    this.SetMessageListener();
+  }
   private async NewUser() {
     let { Id } = this;
     // Make the user a profile with the basic server

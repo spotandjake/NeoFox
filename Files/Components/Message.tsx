@@ -9,7 +9,7 @@ import Markdown from './Message/Markdown';
 import Chatter_User from '../Scripts/Chatter';
 
 type MyProps = { 
-  Self:     Chatter_User ,
+  Self:     Chatter_User,
   Owner:    string,
   Username: string,
   Picture:  string,
@@ -35,7 +35,6 @@ const Message = (props: MyProps) => {
       onClick: () => props.Delete()
     });
   }
-  console.log(props.Picture);
   return (
     <>
       <div className={styles.Container} data-self={(props.Self.Id == props.Owner).toString()} ref={contextMenuContainerRef}>
@@ -49,7 +48,7 @@ const Message = (props: MyProps) => {
           />
         </div>
         <div className={styles.Content} ref={Parsed_Content}>
-          <Markdown MD={props.Content} />
+          <Markdown MD={props.Content} User={props.Self}/>
         </div>
         <span className={styles.Author}>{ props.Username } • { new Date(props.Time).toLocaleString() }</span>
       </div>

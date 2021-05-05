@@ -4,8 +4,10 @@ import Markdown from '../../Scripts/Markdown_Standard';
 import Prism, { Token, TokenStream } from 'prismjs';
 import hljs from '../../Scripts/hljs';
 import { Image } from './Preview';
+
+import Chatter_User from '../../Scripts/Chatter';
 // Function
-type MyProps = { MD: string };
+type MyProps = { MD: string, User: Chatter_User };
 let Marked = (props: MyProps) => {
   let Tokens: TokenStream = Prism.tokenize(
     props.MD, 
@@ -95,6 +97,9 @@ let Marked = (props: MyProps) => {
           break;
         case 'h3':
           Output.push(<h3 key={i}>{Convert(Token).Text}</h3>);
+          break;
+        case 'channel':
+          Output.push(<span key={i} className={styles.channel} onClick={() => props.User.ActiveChannelName(Convert(Token).Text)}>#{Convert(Token).Text}</span>);
           break;
       }
     }

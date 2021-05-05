@@ -88,6 +88,12 @@ Prism.languages.insertBefore("markdown","prolog", {
     inside: {
       pattern: /^### /
     },
+  },
+  channel:{
+    pattern: /#([^\s]+)/,
+    inside: {
+      pattern: /^#/
+    },
   }
 });
 

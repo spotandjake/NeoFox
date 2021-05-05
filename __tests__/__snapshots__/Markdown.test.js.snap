@@ -24,6 +24,15 @@ exports[`Markdown--Bold 1`] = `
 </strong>
 `;
 
+exports[`Markdown--Channel 1`] = `
+<span
+  onClick={[Function]}
+>
+  #
+  Main
+</span>
+`;
+
 exports[`Markdown--Codeblock 1`] = `
 <pre>
   <code
@@ -52,6 +61,15 @@ exports[`Markdown--Header-3 1`] = `
 <h3>
   h3
 </h3>
+`;
+
+exports[`Markdown--Header-3 2`] = `
+<span
+  onClick={[Function]}
+>
+  #
+  Main
+</span>
 `;
 
 exports[`Markdown--InlineCode 1`] = `

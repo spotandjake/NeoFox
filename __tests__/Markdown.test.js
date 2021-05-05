@@ -65,3 +65,9 @@ test('Markdown--Header-3', async function () {
   let tree = component.toJSON();
   expect(tree).toMatchSnapshot();
 });
+
+test('Markdown--Channel', async function () {
+  const component = renderer.create(<Markdown MD={'#Main'} />);
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+});
