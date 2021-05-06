@@ -2,16 +2,13 @@ import React from 'react';
 
 import styles from './Style/Login.module.scss';
 
+import Loader from './Loader';
 import Button from './Components/Login_Btn';
 
 let Login = () => {
   return (
     <div className={styles.Container}>
-      <div className={styles.circles}>
-        {
-          Array.from({length:10},(_, i)=><div key={i}></div>)
-        }
-      </div>
+      <Loader />
       <section>
         <Button Type="Google"/>
         <Button Type="Github"/>
