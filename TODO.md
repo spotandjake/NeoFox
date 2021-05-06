@@ -35,6 +35,7 @@ Priority
 - [ ] Add Direct Messages, Both Backend And UI
 - [ ] Add Video Calls
 - [ ] Finalize Light Theme
++ [ ] Bot api
 Come Back Too
 ====================
 - [ ] make editor md multiple line capable.
