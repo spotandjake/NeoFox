@@ -51,12 +51,3 @@
     }
   }
 }
-/* Context Menu */
-.Ctx, .Ctx_Item {
-  background: var(--Color-Background-1) !important;
-  border: 1px solid  var(--Color-Background-1) !important;
-}
-.Ctx_Item:hover {
-  background: var(--Color-Background-2) !important;
-  border: 1px solid  var(--Color-Background-2) !important;
-}

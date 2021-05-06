@@ -4,7 +4,6 @@
   "description": "A Serverless React Based Chat Application Similar To Discord, Using Firebase's suite.",
   "main": "next.config.js",
   "dependencies": {
-    "@mattkrick/event-target-polyfill": "^0.1.0",
     "@next/bundle-analyzer": "^10.1.3",
     "@react-firebase/auth": "^0.2.10",
     "@types/react-dom": "^17.0.3",
@@ -20,7 +19,6 @@
     "react": "^17.0.2",
     "react-device-detect": "^1.17.0",
     "react-dom": "^17.0.2",
-    "react-tiny-contextmenu": "^1.0.5",
     "sass": "^1.32.11",
     "slate": "^0.62.0",
     "slate-history": "^0.62.0",
