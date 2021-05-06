@@ -15,7 +15,6 @@ class  Channels extends React.Component<MyProps, MyState> {
   Channel_Listener() {
     let Channels = this.props.User.Server.Channels;
     if (!Channels) return;
-    let Active = this.props.User.Channel;
     this.setState({ 
       Channels: [...Channels.entries()].map(([ Value, Name ], i: number) => 
         <div className={styles.Button} key={i} onClick={(() => {

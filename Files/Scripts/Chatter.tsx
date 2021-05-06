@@ -418,9 +418,6 @@ class Chatter_User {
     );
     batch.commit().catch(() => Handle_Error('you have been rate limited'));
   }
-  BugReport(Content: string) {
-    logEvent(this.Analytics, 'Bug_Report', { Content });
-  }
   logout() {
     signOut(auth);
     this.destroy()

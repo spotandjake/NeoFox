@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 
 import styles from './../Style/Components/Settings.module.scss';
 
-import { Bug_Report } from './Message/Preview';
-
 import Chatter_User from '../Scripts/Chatter';
 
 type MyProps = { User: Chatter_User };
@@ -69,22 +67,11 @@ const Settings = (props: MyProps) => {
           </label>
           <h1>Notifications</h1>
         </div>
-        <div
-          className={styles.Button}
-          style={{ marginTop: 'auto' }}
-          onClick={() => {
-            setContent(
-              <Bug_Report 
-                Close={(Text?: any) => {
-                  if (Text) props.User.BugReport(Text);
-                  setContent(<></>);
-                }}
-              />
-            );
-          }}
+        <a className={styles.Button} style={{ marginTop: 'auto' }}
+          href={'https://github.com/spotandjake/NeoFox/issues/new?assignees=&labels=&template=bug_report.md&title='}
         >
           <span className={styles.Center}>Report Bug</span>
-        </div>
+        </a>
         <div className={styles.Button} onClick={(() => props.User.logout())}>
           <span className={styles.Center}>Logout</span>
         </div>

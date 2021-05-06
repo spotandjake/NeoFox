@@ -8,23 +8,6 @@ const Modal = (props: { children?: JSX.Element }) => {
   return Container ? createPortal(props.children, Container) : null;
 }
 export default Modal;
-// Bug Report
-export const Bug_Report = (props: { Close: Function }) => {
-  let TxtArea: any = createRef(), Container: any = createRef();
-  return (
-    <Modal>
-      <div className={styles.Preview} ref={Container} onClick={(e: any) => { 
-        if (e.target == Container.current) props.Close();
-      }}>
-        <div>
-          <h1>Report A Bug</h1>
-          <textarea ref={TxtArea}></textarea>
-          <button onClick={() => props.Close(TxtArea.current.value)}>Submit</button>
-        </div>
-      </div>
-    </Modal>
-  );
-}
 // Image Peview
 type ImgProps = { Url: string, alt?: string };
 type ImageState = { Content: JSX.Element }
