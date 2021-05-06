@@ -32,7 +32,7 @@ let Marked = (props: MyProps) => {
       });
       return { Text, Output };
     }
-    if (typeof Token == 'string') {
+    if (typeof Token == 'string' && Token.trim()) {
       Output.push(<p key={i}>{Token}</p>);
     } else {
       switch(Token.type) {
@@ -41,6 +41,9 @@ let Marked = (props: MyProps) => {
           break;
         case 'italic':
           Output.push(<em key={i}>{Convert(Token).Text}</em>);
+          break;
+        case 'bolditalic':
+          Output.push(<strong key={i}><em>{Convert(Token).Text}</em></strong>);
           break;
         case 'strikethrough':
           Output.push(<del key={i}>{Convert(Token).Text}</del>);
@@ -60,7 +63,7 @@ let Marked = (props: MyProps) => {
             Href = encodeURI(Href.replace('javascript:','')).replace(/%25/g, '%');
           } catch (e) { Href = ''; }
           if (Href == '') Output.push(<p key={i}>{Title}</p>);
-          else Output.push(<a key={i} href={Href}>{Title}</a>);
+          else Output.push(<a key={i} href={Href}>{Title||Href}</a>);
           break;
         case 'url-reference':
           let { Type, Url } = Convert(Token).Output;
@@ -100,6 +103,23 @@ let Marked = (props: MyProps) => {
           break;
         case 'channel':
           Output.push(<span key={i} className={styles.channel} onClick={() => props.User.ActiveChannelName(Convert(Token).Text)}>#{Convert(Token).Text}</span>);
+          break;
+        case 'orderedlist':
+          Output.push(
+            <ol key={i}>
+            {Convert(Token).Text.split('\n').map((Text, n) => <li key={n}>{Text}</li>)}
+            </ol>
+          );
+          break;
+        case 'unorderedlist':
+          Output.push(
+            <ul key={i}>
+            {Convert(Token).Text.split('\n').map((Text, n) => <li key={n}>{Text}</li>)}
+            </ul>
+          );
+          break;
+        case 'horizontalRule':
+          Output.push(<hr key={i} />);
           break;
       }
     }

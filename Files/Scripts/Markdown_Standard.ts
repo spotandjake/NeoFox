@@ -14,20 +14,20 @@ Prism.languages.insertBefore("markdown","prolog", {
     }
   },
   url:{
-    pattern:/(?:\[(.*?)\]\((.*?)\))/,
+    pattern:/(?:\[(.*?)\]\((.*?)\))|<[^\n<>]*>/,
     inside:{
       Type: {
         pattern:/(?<=\[)([^\[\]]*)/,
       },
       Url: {
-        pattern:/((?<=\()|(?<=\(<))([^(<>)]*)/,
+        pattern:/((?<=\()|(?<=\(<))([^(<>)]*)|(?!<)[^\n<>]+(?=>)/,
       }
     }
   },
   blockquote:{
     pattern:/^> (.*)$/m,
     inside: {
-      pattern: /^>/
+      pattern: /^> /
     },
   },
   code:{
@@ -48,39 +48,45 @@ Prism.languages.insertBefore("markdown","prolog", {
     }
   },
   bold:{
-    pattern:/(?<!\*)\*\*([^*]+)\*\*/g,
+    pattern:/(?<!\*)\*\*([^*\n]+)\*\*/g,
     inside:{
       punctuation:/^\*\*|\*\*$/
     }
   },
   strikethrough:{
-    pattern:/(?<!\~)\~\~([^*]+)\~\~/g,
+    pattern:/(?<!\~)\~\~([^*\n]+)\~\~/g,
     inside:{
       punctuation:/^\~\~|\~\~$/
     }
   },
   underline:{
-    pattern:/(?<!\_)\_\_([^_]+)\_\_/g,
+    pattern:/(?<!\_)\_\_([^_\n]+)\_\_/g,
     inside:{
       punctuation:/^\_\_|\_\_$/
     }
   },
   italic:{
-    pattern:/(?<![*_])[*_]([^*_]+)[*_]/,
+    pattern:/(?<![*_])[*_]([^*_\n]+)[*_]/,
     inside:{
       punctuation:/^[*_]|[*_]$/
     }
   },
+  bolditalic: {
+    pattern:/\*\*\*([^*]+)\*\*\*/g,
+    inside:{
+      punctuation:/^\*\*\*|\*\*\*$/
+    }
+  },
   h1: {
-    pattern:/^# (.*$)/m,
+    pattern:/^# (.*$)|([^\n]+)\n==+/m,
     inside: {
-      pattern: /^# /
+      pattern: /^# |(?=.*)\n==+/
     },
   },
   h2: {
-    pattern:/^## (.*$)/m,
+    pattern:/^## (.*$)|([^\n]+)\n--+/m,
     inside: {
-      pattern: /^## /
+      pattern: /^## |(?=.*)\n--+/
     },
   },
   h3: {
@@ -89,11 +95,44 @@ Prism.languages.insertBefore("markdown","prolog", {
       pattern: /^### /
     },
   },
+  h4: {
+    pattern:/^#### (.*$)/m,
+    inside: {
+      pattern: /^#### /
+    },
+  },
+  h5: {
+    pattern:/^##### (.*$)/m,
+    inside: {
+      pattern: /^##### /
+    },
+  },
+  h6: {
+    pattern:/^###### (.*$)/m,
+    inside: {
+      pattern: /^###### /
+    },
+  },
   channel:{
     pattern: /#([^\s]+)/,
     inside: {
       pattern: /^#/
     },
+  },
+  orderedlist: {
+    pattern: /^(\d\.(.*)\n(?!=\d\.)|(?!=\d\.)\s*\d\.(.*))+$/,
+    inside: {
+      pattern: /^\d\.\s/gm
+    }
+  },
+  unorderedlist: {
+    pattern: /^([\+\*\-] (.*)\n(?!=[\+\*\-])|(?!=[\+\*\-])\s*[\+\*\-](.*))+$/,
+    inside: {
+      pattern: /^[\+\*\-]\s/gm
+    }
+  },
+  horizontalRule: {
+    pattern: /\n\n---+\n\n|\n\n===+\n\n/
   }
 });
 

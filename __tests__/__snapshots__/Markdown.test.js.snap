@@ -14,13 +14,21 @@ exports[`Markdown--Attachment 1`] = `
 
 exports[`Markdown--BlockQoute 1`] = `
 <blockquote>
-   Test
+  Test
 </blockquote>
 `;
 
 exports[`Markdown--Bold 1`] = `
 <strong>
   Bold
+</strong>
+`;
+
+exports[`Markdown--Bold--And--Italic 1`] = `
+<strong>
+  <em>
+    test
+  </em>
 </strong>
 `;
 
@@ -51,7 +59,19 @@ exports[`Markdown--Header-1 1`] = `
 </h1>
 `;
 
+exports[`Markdown--Header-1-Type-2 1`] = `
+<h1>
+  h1
+</h1>
+`;
+
 exports[`Markdown--Header-2 1`] = `
+<h2>
+  h2
+</h2>
+`;
+
+exports[`Markdown--Header-2-Type-2 1`] = `
 <h2>
   h2
 </h2>
@@ -63,13 +83,19 @@ exports[`Markdown--Header-3 1`] = `
 </h3>
 `;
 
-exports[`Markdown--Header-3 2`] = `
-<span
-  onClick={[Function]}
->
-  #
-  Main
-</span>
+exports[`Markdown--Header-4 1`] = `null`;
+
+exports[`Markdown--Header-5 1`] = `null`;
+
+exports[`Markdown--Header-6 1`] = `null`;
+
+exports[`Markdown--Horizontal--Rule 1`] = `
+Array [
+  <p>
+    test
+  </p>,
+  <hr />,
+]
 `;
 
 exports[`Markdown--InlineCode 1`] = `
@@ -82,6 +108,17 @@ exports[`Markdown--Italic 1`] = `
 <em>
   console.log('Hello world');
 </em>
+`;
+
+exports[`Markdown--Ordered--List 1`] = `
+<ol>
+  <li>
+    test
+  </li>
+  <li>
+    test
+  </li>
+</ol>
 `;
 
 exports[`Markdown--StrikeThrough 1`] = `
@@ -102,4 +139,45 @@ exports[`Markdown--Url 1`] = `
 >
   Repl
 </a>
+`;
+
+exports[`Markdown--Url-2 1`] = `
+<a
+  href="htttps://repl.it/"
+>
+  htttps://repl.it/
+</a>
+`;
+
+exports[`Markdown--unordered--List 1`] = `
+<ul>
+  <li>
+    test
+  </li>
+  <li>
+    test
+  </li>
+</ul>
+`;
+
+exports[`Markdown--unordered--List-2 1`] = `
+<ul>
+  <li>
+    test
+  </li>
+  <li>
+    test
+  </li>
+</ul>
+`;
+
+exports[`Markdown--unordered--List-3 1`] = `
+<ul>
+  <li>
+    test
+  </li>
+  <li>
+    test
+  </li>
+</ul>
 `;
