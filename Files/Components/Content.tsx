@@ -16,7 +16,7 @@ const Content = (props: { User: Chatter_User }) => {
       if (Mounted.current) setActive({ Server, Channel });
     }
     let TypingUpdate = () => {
-      let Names: string[] = [];
+      let Names: JSX.Element[] = [];
       [...props.User.Typers.values()].forEach(({ Name }) => Names.push(<span key={Name}>{Name}</span>));
       //@ts-ignore
       if (Mounted.current) setTyping(Names);

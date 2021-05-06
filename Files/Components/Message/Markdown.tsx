@@ -35,6 +35,7 @@ let Marked = (props: MyProps) => {
     if (typeof Token == 'string' && Token.trim()) {
       Output.push(<p key={i}>{Token}</p>);
     } else {
+      //@ts-ignore
       switch(Token.type) {
         case 'bold':
           Output.push(<strong key={i}>{Convert(Token).Text}</strong>);

@@ -7,32 +7,10 @@ const base64ToFile = (base64: string, mime: string = "image/jpeg") => {
   return new window.Blob([new Uint8Array(content)], { type: mime })
 }
 
-const blobToBase64 = (file: Blob) => {
-  return new Promise((resolve, reject) => {
-    const fileReader = new window.FileReader()
-    fileReader.addEventListener(
-      "load",
-      (evt) => {
-        resolve(evt.target.result)
-      },
-      false
-    )
-
-    fileReader.addEventListener(
-      "error",
-      (err) => {
-        reject(err)
-      },
-      false
-    )
-
-    fileReader.readAsDataURL(file)
-  })
-}
-
 const imageToCanvas = (image: any, width: number, height: number, orientation: number) => {
   const canvas = document.createElement("canvas")
   const context = canvas.getContext("2d")
+  if (!context) throw Error('Context Not Found');
 
   canvas.width = width
   canvas.height = height
@@ -90,7 +68,6 @@ const imageToCanvas = (image: any, width: number, height: number, orientation: n
   }
   return canvas
 }
-
 const canvasToBlob = (canvas: any, quality: any): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     // In order to compress, the final image format must be jpeg
@@ -101,12 +78,10 @@ const canvasToBlob = (canvas: any, quality: any): Promise<Blob> => {
     )
   })
 }
-
 const size = (size: number) => {
   return {
     kB: size * 1e-3,
     MB: size * 1e-6
   }
 }
-
-export { base64ToFile, imageToCanvas, canvasToBlob, size, blobToBase64 }
+export { base64ToFile, imageToCanvas, canvasToBlob, size }

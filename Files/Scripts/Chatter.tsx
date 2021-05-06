@@ -3,8 +3,6 @@ import React from 'react';
 //@ts-ignore
 import Message from '../Components/Message';
 //@ts-ignore
-import EvtTarget from '@mattkrick/event-target-polyfill';
-//@ts-ignore
 import { auth, firestore, IUser, database } from './Firebase';
 import { 
   writeBatch,
@@ -104,8 +102,8 @@ class Msg {
     )
   }
 }
-
-class Chatter_User extends EvtTarget {
+interface Callback { (evt: Event): void }
+class Chatter_User {
   // User Info
   public Id: string;
   public Name: string;
@@ -135,8 +133,8 @@ class Chatter_User extends EvtTarget {
   private TypingInterval:  number      | null = null;
   // Random
   private Type_Interval: number = 0;
+  private listeners: { [type: string]: Array<Callback> } = {};
   constructor(User: IUser) {
-    super();
     // Ser Public Vars
     this.Id = User.uid;
     //@ts-ignore
@@ -151,6 +149,31 @@ class Chatter_User extends EvtTarget {
     this.Notification();
 
     this.SetListeners();
+  }
+  // Event Listner
+  addEventListener (type: string, callback: Callback) {
+    if (!(type in this.listeners)) this.listeners[type] = [];
+    this.listeners[type].push(callback);
+  }
+  removeEventListener (type: string, callback: Callback) {
+    if (!(type in this.listeners)) return;
+    const stack = this.listeners[type];
+    // tslint:disable-next-line one-variable-per-declaration
+    for (let i = 0, l = stack.length; i < l; i++) {
+      if (stack[i] === callback) {
+        stack.splice(i, 1);
+        return;
+      }
+    }
+  }
+  dispatchEvent (event: Event) {
+    if (!(event.type in this.listeners)) return true;
+    const stack = this.listeners[event.type].slice();
+    // tslint:disable-next-line one-variable-per-declaration
+    for (let i = 0, l = stack.length; i < l; i++) {
+      stack[i].call(this, event);
+    }
+    return !event.defaultPrevented;
   }
   // Destory
   destroy() {

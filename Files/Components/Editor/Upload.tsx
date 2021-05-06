@@ -23,7 +23,8 @@ class Upload extends React.Component<MyProps, { }> {
     let files: File[] = [];
     if (!Files) return;
     for (let i = 0; i < Files.length; i++) {
-      files.push(Files.item(i))
+      let Item: File | null = Files.item(i);
+      if (Item) files.push(Item);
     }
     compress.compress(files).then(async (Imgs: Picture[]) => {
       if (!Imgs[0]) return console.log(Imgs);

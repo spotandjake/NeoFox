@@ -8,12 +8,13 @@ import Chatter_User from '../Scripts/Chatter';
 
 type MyProps = { User: Chatter_User };
 const Settings = (props: MyProps) => {
-  const [ Content, setContent ] = useState(<></>);
-  const CheckBox: any = useRef(null), [ Servers, setServers ] = useState([]);
+  const [ Content, setContent ] = useState<JSX.Element>(<></>);
+  const CheckBox = useRef<HTMLInputElement>(null), [ Servers, setServers ] = useState<JSX.Element[]>([]);
   useEffect(() => {
     let UserUpdate = () => {
-      if (CheckBox) 
-        CheckBox.current.checked = localStorage.getItem('Theme') == 'dark';
+      if (CheckBox)
+        //@ts-ignore
+        CheckBox.current.checked = (localStorage.getItem('Theme') || 'dark') == 'dark';
       let Servers = props.User.Servers;
       setServers(
         [...Servers.keys()].map((Id: string, i: number) => {
@@ -50,9 +51,10 @@ const Settings = (props: MyProps) => {
             <input
               ref={CheckBox}
               type="checkbox" onChange={() => {
-                let theme = (localStorage.getItem('Theme') || 'dark') == 'dark' ? 'light' : 'dark';
+                let theme: string = (localStorage.getItem('Theme') || 'dark') == 'dark' ? 'light' : 'dark';
                 document.documentElement.dataset.theme = theme;
                 localStorage.setItem('Theme', theme);
+                //@ts-ignore
                 CheckBox.current.checked = theme == 'dark';
               }}
             />
@@ -67,9 +69,9 @@ const Settings = (props: MyProps) => {
           </label>
           <h1>Notifications</h1>
         </div>
-        <div 
-          className={styles.Button} 
-          style={{ marginTop: 'auto' }}  
+        <div
+          className={styles.Button}
+          style={{ marginTop: 'auto' }}
           onClick={() => {
             setContent(
               <Bug_Report 

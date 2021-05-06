@@ -1,6 +1,6 @@
  // https://stackoverflow.com/questions/20600800/js-client-side-exif-orientation-rotate-and-mirror-jpeg-images/31273162#31273162
 
-const extractOrientation = (file: File): Promise<number> => {
+const extractOrientation = (file: File | Blob): Promise<number> => {
   return new Promise((resolve) => {
     const reader: any = new window.FileReader()
     reader.onload = (event: any) => {

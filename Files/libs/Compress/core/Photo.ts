@@ -8,7 +8,7 @@ export default class Photo {
   public name: string;
   public type: string;
   public size: number;
-  public orientation: number;
+  public orientation: number = 1;
   public _img: any;
   public width: number = 0;
   public height: number = 0;

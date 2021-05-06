@@ -28,7 +28,7 @@ interface Conversion {
   elapsedTimeInSeconds?: number;
   endType?:              string;
 }
-interface Picture {
+export interface Picture {
   photo: Photo;
   info:  Conversion;
 }
@@ -129,8 +129,8 @@ class Compress {
       }
     } else return;
   }
-  async compress(files: (File | null)[]): Promise<Picture[]> {
-    return Promise.all(files.filter(n => n).map((file: File) => this._compressFile(file)))
+  async compress(files: File[]): Promise<Picture[]> {
+    return Promise.all(files.map((file: File) => this._compressFile(file)))
   }
 }
-export { Compress, Picture };
+export { Compress };

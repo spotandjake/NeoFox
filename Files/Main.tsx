@@ -5,7 +5,6 @@ import styles from './Style/Main.module.scss';
 // Components
 import Servers from './Components/Servers';
 import Channels from './Components/Channels';
-import QuickSettings from './Components/Quick_Settings';
 import Content from './Components/Content';
 import Settings from './Components/Settings';
 
