@@ -33,17 +33,12 @@ class Main extends React.Component<MyProps, MyState> {
         <Servers User={this.props.User}/>
         {
           (() => {
-            switch (this.state.Server) {
-              case 'Settings':
-                return (<Settings User={this.props.User} />);
-              default:
-                return (
-                  <>
-                    <Channels User={this.props.User} />
-                    <Content User={this.props.User} />
-                  </>
-                );
-            }
+            return this.state.Server == 'Settings'?
+              (<Settings User={this.props.User} />) :
+              (<>
+                <Channels User={this.props.User} />
+                <Content User={this.props.User} />
+              </>);
           })()
         }
       </div>
