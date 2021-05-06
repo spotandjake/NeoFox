@@ -23,17 +23,17 @@ Done
 - [x] Fix up the scroll to latest message
 - [x] Add Notifcation Support Still need to test and upload to cloud functions
 - [x] Make A Logo, UI
+- [x] Mem Leak Issue with Tiny Context Menu
+- [x] Rescale UI
 Priority
 ====================
 - [ ] Move images off of nextjs and onto a cdn -- Setup Our Own
 - [ ] add server settings, UI
 - [ ] Add in Ability to Scroll For More Messages, UI
 - [ ] Find Memory Leak
-- [ ] Mem Leak Issue with Tiny Context Menu
 - [ ] Add In Pofile Pages, UI
 - [ ] Add Direct Messages, Both Backend And UI
 - [ ] Add Video Calls
-- [ ] Rescale UI
 - [ ] Finalize Light Theme
 Come Back Too
 ====================
