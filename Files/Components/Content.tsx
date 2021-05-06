@@ -33,13 +33,13 @@ const Content = (props: { User: Chatter_User }) => {
     <section className={styles.Container}>
       <div className={styles.Top}>
         <div className={styles.Icon}>
-          <Image
-            src={`${process.env.Storage_Url}/Servers/${Active.Server.Id}/Icon`}
-            alt="Server Icon"
-            layout="responsive"
-            width={32}
-            height={32}
-          />
+        {
+          (() => (Active.Server.Id != ''? (<Image
+              src={`${process.env.Storage_Url}/Servers/${Active.Server.Id}/Icon`}
+              alt="Server Icon" layout="responsive" width={32} height={32}
+            />): (<></>))
+          )()
+        }
         </div>
         <h2 className={styles.Head}>{`${Active.Server.Name}/${Active.Channel.Name}`}</h2>
       </div>

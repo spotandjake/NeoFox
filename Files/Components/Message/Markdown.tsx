@@ -13,7 +13,7 @@ let Marked = (props: MyProps) => {
     props.MD, 
     Markdown
   );
-  let Output: Jsx.Element[] = [];
+  let Output: JSX.Element[] = [];
   Tokens.forEach((Token: Token | string, i) => {
     if (!Token) return;
     let Convert = ({ content }: any) => {
