@@ -42,7 +42,7 @@ class Upload extends React.Component<MyProps, { }> {
     return (
       <div className={styles.Icon} onClick={() => (this.input.click())}>
         <picture>
-          <img src={'/Images/Upload.svg'} width="18" height="18" />
+          <img alt="Upload" src={'/Images/Upload.svg'} width="18" height="18" />
         </picture>
         <input 
           type="file" 

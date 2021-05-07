@@ -7,9 +7,12 @@ import Chatter_User from '../Scripts/Chatter';
 type MyProps = { User: Chatter_User };
 const Settings = (props: MyProps) => {
   const [ Content, setContent ] = useState<JSX.Element>(<></>);
-  const CheckBox = useRef<HTMLInputElement>(null), [ Servers, setServers ] = useState<JSX.Element[]>([]);
+  const CheckBox = useRef<HTMLInputElement>(null), NotifBox = useRef<HTMLInputElement>(null), [ Servers, setServers ] = useState<JSX.Element[]>([]);
   useEffect(() => {
     let UserUpdate = () => {
+      if (NotifBox)
+        //@ts-ignore
+        NotifBox.current.checked = Notification.permission == 'granted';
       if (CheckBox)
         //@ts-ignore
         CheckBox.current.checked = (localStorage.getItem('Theme') || 'dark') == 'dark';
@@ -62,7 +65,12 @@ const Settings = (props: MyProps) => {
         </div>
         <div className={styles.Card}>
           <label className={styles.Switch}>
-            <input type="checkbox" />
+            <input
+              ref={NotifBox}
+              type="checkbox" onChange={() => {
+                props.User.Notification(NotifBox.current?.checked);
+              }}
+            />
             <span className={styles.Slider}></span>
           </label>
           <h1>Notifications</h1>

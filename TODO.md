@@ -26,10 +26,11 @@ Done
 - [x] Mem Leak Issue with Tiny Context Menu
 - [x] Rescale UI
 - [x] fix mem leak
+- [x] Add ability to scroll up
 Priority
 ====================
+- [ ] on scroll down hide msgs
 - [ ] add server settings, UI
-- [ ] Add in Ability to Scroll For More Messages, UI
 - [ ] Add In Pofile Pages, UI
 - [ ] Add Direct Messages, Both Backend And UI
 - [ ] Add Video Calls

@@ -43,3 +43,8 @@ pre > code {
   max-width: 100%;
   padding: 1.25rem;
 }
+// Random
+[data-slate-placeholder="true"] {
+  color: var(--Color-Text-2) !important;
+  opacity: .75 !important;
+}

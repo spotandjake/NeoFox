@@ -146,7 +146,6 @@ class Chatter_User {
 
     // Call init functions
     logEvent(this.Analytics, 'login');
-    this.Notification();
 
     this.SetListeners();
   }
@@ -405,15 +404,17 @@ class Chatter_User {
     this.dispatchEvent(new Event('MessageUpdate'));
   }
   // General Functions
-  Notification() {
+  Notification(On: boolean = true) {
     let { Notifications, Messaging, Id } = this;
     if (!Notifications) {
       Notification.requestPermission().then((result: string) => {
         let Allowed = (result == 'granted' || result == 'default');
         if (Allowed) {
-          getToken(Messaging).then((FCM: string) => {
-            updateDoc(doc(firestore, 'Users', Id), { FCM: arrayUnion(FCM) }).catch(Handle_Error);
-          }).catch(Handle_Error);
+          if (On) {
+            getToken(Messaging).then((FCM: string) => {
+              updateDoc(doc(firestore, 'Users', Id), { FCM: arrayUnion(FCM) }).catch(Handle_Error);
+            }).catch(Handle_Error);
+          }
         }
       });
     }
