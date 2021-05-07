@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Message from '../Components/Message';
 import { auth, firestore, IUser, database } from './Firebase';
 import { 
@@ -36,7 +36,8 @@ let Handle_Error = (Message: string) => {
   console.log('====================');
 }
 class Msg {
-  public Group: number;
+  public Group:  number;
+  public local:  boolean;
   public Doc:    DocumentReference;
   public Id:      string;
   public Content: string;
@@ -48,6 +49,7 @@ class Msg {
   private User:   Chatter_User;
   constructor(
     Group:   number,
+    local:   boolean,
     Doc:     DocumentReference,
     Id:      string,
     Content: string,
@@ -58,6 +60,7 @@ class Msg {
 
     User:    Chatter_User
   ) {
+    this.local   = local;
     this.Group   = Group;
     this.Doc     = Doc;
     this.Id      = Id;
@@ -69,20 +72,21 @@ class Msg {
 
     this.User    = User;
   }
-  TTS() {
+  TTS(): void {
     let msg = new SpeechSynthesisUtterance();
     msg.text=`${this.Owner} Said ${this.Content}`;
     window.speechSynthesis.speak(msg);
   }
-  Delete() {
+  Delete(): void {
     deleteDoc(this.Doc);
   }
-  Render() {
-    let { Id, Content, Created, Owner, Picture, UID, User } = this;
-    let Time = Created.toMillis();
+  Render(): JSX.Element {
+    let { Id, Content, Created, Owner, Picture, UID, User, Group } = this;
+    let Time: number = Created.toMillis();
     return (
       <Message
         key={Id}
+        Group={Group}
         Self={User}
         Owner={UID}
         Username={Owner}
@@ -94,7 +98,7 @@ class Msg {
         TTS={this.TTS.bind(this)}
         Delete={this.Delete.bind(this)}
       />
-    )
+    );
   }
 }
 interface Callback { (evt: Event): void }
@@ -135,8 +139,8 @@ class Chatter_User {
   constructor(User: IUser) {
     // Ser Public Vars
     this.Id = User.uid;
-    this.Name = User.displayName;
-    this.Picture = User.photoURL;
+    this.Name = User.displayName || '';
+    this.Picture = User.photoURL || '';
     // Set Private Vars
     this.User = User;
 
@@ -285,7 +289,11 @@ class Chatter_User {
     this.ServerListener = onSnapshot(doc(firestore, 'Servers', Server.Id), 
       async (Server_Snap: DocumentSnapshot) => {
         if (Server_Snap.exists()) {
-          let Data: DocumentData = Server_Snap.data(), { Channels, Name }: { Channels: { [key: string]: string }, Name: string } = Data;
+          interface Server_Type {
+            Channels: { [key: string]: string };
+            Name: string;
+          }
+          let Data: DocumentData = Server_Snap.data(), { Channels, Name } = (Data as Server_Type);
           if (!Data || !Channels || !Name) return;
           if (Name != this.Servers.get(Server.Id)) {
             updateDoc(
@@ -354,6 +362,7 @@ class Chatter_User {
         ...(LastMsg ?  [ startAfter(LastMsg.Message.Created)] : [ ]),
         limit(Limit)
       ),
+      { includeMetadataChanges: false },
       async (Server_Changes: QuerySnapshot) => {
         let Msgs: Map<string, { Time: number, Message: Msg }> = this.Messages;
         Server_Changes.docChanges().forEach((msg: DocumentChange) => {
@@ -363,6 +372,7 @@ class Chatter_User {
             let Time: number = Data.Created.toMillis();
             let messageInstance: Msg = new Msg(
               Group,
+              msg.doc.metadata.hasPendingWrites,
               doc(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages', msg.doc.id), 
               msg.doc.id, 
               Data.Content,
@@ -378,15 +388,17 @@ class Chatter_User {
         this.Messages = Msgs;
         this.dispatchEvent(new Event('MessageUpdate'));
       },
-      (err: string) => Handle_Error(err)
+      () => {}
     ))
   }
   ScrollUp() {
+    if (!(this.Channel.Id && this.Server.Id)) return;
     this.SetMessageListener();
   }
   ScrollDown() {
     if (!this.Message_Listeners.length || this.Message_Listeners.length == 1) return;
-    this.Message_Listeners.pop()();
+    let Removing: Unsubscribe | undefined = this.Message_Listeners.pop();
+    if (Removing) Removing();
     [...this.Messages.entries()].forEach(([ Key, { Time, Message } ]) => {
       if (Message.Group == this.Message_Listeners.length) this.Messages.delete(Key);
     });
@@ -436,4 +448,5 @@ class Chatter_User {
     this.destroy()
   }
 }
+export { Msg };
 export default Chatter_User;

@@ -8,17 +8,19 @@ import Markdown from './Message/Markdown';
 
 import Chatter_User from '../Scripts/Chatter';
 
-type MyProps = { 
-  Self:     Chatter_User,
-  Owner:    string,
-  Username: string,
-  Picture:  string,
-  Content:  string,
-  Time:     number,
-  Perms: string[],
+interface MyProps {
+  key:      string;
+  Group:    number;
+  Self:     Chatter_User;
+  Owner:    string;
+  Username: string;
+  Picture:  string;
+  Content:  string;
+  Time:     number;
+  Perms:    string[];
 
-  TTS:    Function,
-  Delete: Function,
+  TTS:      Function;
+  Delete:   Function;
 };
 const Message = (props: MyProps) => {
   const contextMenuContainerRef = React.useRef(null);
@@ -37,7 +39,7 @@ const Message = (props: MyProps) => {
   }
   return (
     <>
-      <div className={styles.Container} data-self={(props.Self.Id == props.Owner).toString()} ref={contextMenuContainerRef}>
+      <div className={styles.Container} data-self={(props.Self.Id == props.Owner).toString()} data-group={props.Group} ref={contextMenuContainerRef}>
         <div className={styles.Icon}>
           <Image
             src={props.Picture}

@@ -25,6 +25,7 @@ Done
 - [x] Make A Logo, UI
 - [x] Mem Leak Issue with Tiny Context Menu
 - [x] Rescale UI
+- [x] fix mem leak
 Priority
 ====================
 - [ ] add server settings, UI

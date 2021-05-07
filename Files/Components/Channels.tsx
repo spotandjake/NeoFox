@@ -8,9 +8,10 @@ type MyProps = { User: Chatter_User };
 type MyState = { Channels: JSX.Element[] };
 class  Channels extends React.Component<MyProps, MyState> {
   public state: MyState = { Channels: [] };
+  private Listener: { type: string, Key: number } ;
   constructor(props: MyProps) {
     super(props);
-    props.User.addEventListener('ServerUpdate', this.Channel_Listener.bind(this));
+    this.Listener = props.User.on('ServerUpdate', this.Channel_Listener.bind(this));
   }
   Channel_Listener() {
     let Channels = this.props.User.Server.Channels;
@@ -27,7 +28,7 @@ class  Channels extends React.Component<MyProps, MyState> {
     this.Channel_Listener();
   }
   componentWillUnmount() {
-    this.props.User.removeEventListener('ServerUpdate', this.Channel_Listener.bind(this));
+    if (this.Listener) this.props.User.off(this.Listener);
   }
   render() {
     return (
