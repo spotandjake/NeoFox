@@ -21,8 +21,9 @@ class Messages extends React.Component<MyProps, MyState> {
         this.Messge_Container.current.scrollTop > -20
       )
     ) Scroll = true;
+    let messages = new Map([...this.props.User.Messages.entries()].sort((a, b) => b[1].Time-a[1].Time));
     this.setState({
-      Messages: [...this.props.User.Messages.values()].map((msg: any) => msg.Message.Render())
+      Messages: [...messages.values()].map((msg: any) => msg.Message.Render())
     });
     if (Scroll) {
       if (this.Messge_Container && this.Messge_Container.current)

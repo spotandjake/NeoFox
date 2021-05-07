@@ -27,15 +27,14 @@ Done
 - [x] Rescale UI
 Priority
 ====================
-- [ ] Move images off of nextjs and onto a cdn -- Setup Our Own
 - [ ] add server settings, UI
 - [ ] Add in Ability to Scroll For More Messages, UI
-- [ ] Find Memory Leak
 - [ ] Add In Pofile Pages, UI
 - [ ] Add Direct Messages, Both Backend And UI
 - [ ] Add Video Calls
 - [ ] Finalize Light Theme
-+ [ ] Bot api
+- [ ] Move images off of nextjs and onto a cdn -- Setup Our Own
+- [ ] Bot api
 Come Back Too
 ====================
 - [ ] make editor md multiple line capable.

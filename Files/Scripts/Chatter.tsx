@@ -22,9 +22,12 @@ import {
   DocumentData,
   query,
   limit,
+  limitToLast,
   orderBy,
   QuerySnapshot,
-  DocumentChange
+  DocumentChange,
+  startAfter,
+  endBefore
   //@ts-ignore
 } from 'firebase/firestore';
 //@ts-ignore
@@ -44,7 +47,7 @@ let Handle_Error = (Message: string) => {
   console.log('====================');
 }
 class Msg {
-  private Doc:    DocumentReference;
+  public Doc:    DocumentReference;
   public Id:      string;
   public Content: string;
   public Created: Timestamp;
@@ -128,9 +131,12 @@ class Chatter_User {
   private UserListener:    Unsubscribe | null = null;
   private ServerListener:  Unsubscribe | null = null;
   private PermsListener:   Unsubscribe | null = null;
-  private MessageListener: Unsubscribe | null = null;
   private TypingListener:  Unsubscribe | null = null;
   private TypingInterval:  number      | null = null;
+
+  private Message_Listeners:  Unsubscribe[] = [];
+  private Limit: number = 3;
+  private LastMsg: DocumentReference | null = null;
   // Random
   private Type_Interval: number = 0;
   private listeners: { [type: string]: Array<Callback> } = {};
@@ -180,7 +186,8 @@ class Chatter_User {
     if (this.UserListener) this.UserListener();
     if (this.ServerListener) this.ServerListener();
     if (this.PermsListener) this.PermsListener();
-    if (this.MessageListener) this.MessageListener();
+    this.Message_Listeners.forEach((Remove: Unsubscribe) => Remove());
+    this.Message_Listeners = [];
     if (this.TypingListener) this.TypingListener();
     if (this.TypingInterval) clearInterval(this.TypingInterval);
   }
@@ -208,6 +215,10 @@ class Chatter_User {
     }
     //@ts-ignore
     this.dispatchEvent(new Event('ActiveUpdate'));
+    this.Message_Listeners.forEach((Remove: Unsubscribe) => Remove());
+    this.Message_Listeners = [];
+    this.Messages = new Map();
+    this.SetGeneralListener();
     this.SetMessageListener();
   }
   ActiveChannelName (Channel_Name: string) {
@@ -215,15 +226,7 @@ class Chatter_User {
     [...this.Server.Channels.entries()].forEach(([k,v]) => {
       if (v == Channel_Name) Channel_Id = k;
     });
-    if (!this.Server.Channels.has(Channel_Id)) return;
-    this.Channel = { 
-      //@ts-ignore
-      Name: this.Server.Channels.get(Channel_Id),
-      Id: Channel_Id
-    }
-    //@ts-ignore
-    this.dispatchEvent(new Event('ActiveUpdate'));
-    this.SetMessageListener();
+    this.ActiveChannel(Channel_Id);
   }
   private async NewUser() {
     let { Id } = this;
@@ -305,9 +308,8 @@ class Chatter_User {
       }
     )
   }
-  private SetMessageListener () {
-    let { Id, Server, Channel } = this, First: boolean = true;
-    // Permissions listeners
+  private SetGeneralListener () {
+    let { Id, Server, Channel } = this;
     if (this.PermsListener) this.PermsListener();
     this.PermsListener = onSnapshot(doc(firestore, 'Servers', Server.Id, 'Users', Id), 
       async (Server_Snap: DocumentSnapshot) => {
@@ -315,39 +317,6 @@ class Chatter_User {
           let Data: any = Server_Snap.data();
           if (Data.Permissions) this.Perms = Data.Permissions;
         }
-      }
-    )
-    // Message Listener
-    if (this.MessageListener) this.MessageListener();
-    this.MessageListener = onSnapshot(
-      query(
-        collection(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages'),
-        limit(25), orderBy('Created', 'desc')
-      ),
-      async (Server_Changes: QuerySnapshot) => {
-        let Msgs: Map<string, { Time: number, Message: Msg }> = First ? new Map() : this.Messages;
-        if (First) First = false;
-        Server_Changes.docChanges().forEach((msg: DocumentChange) => {
-          if (msg.type != 'removed') {
-            const Data: DocumentData = msg.doc.data();
-            if (!Data.Created) Data.Created = Timestamp.now();
-            let Time: number = Data.Created.toMillis();
-            let messageInstance: Msg = new Msg(
-              doc(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages', msg.doc.id), 
-              msg.doc.id, 
-              Data.Content,
-              Data.Created,
-              Data.Owner,
-              Data.Picture,
-              Data.UID,
-              this
-            )
-            Msgs.set(msg.doc.id, { Time, Message: messageInstance });
-          } else Msgs.delete(msg.doc.id);
-        });
-        this.Messages = new Map([...Msgs.entries()].sort((a, b) => b[1].Time-a[1].Time));
-        //@ts-ignore
-        this.dispatchEvent(new Event('MessageUpdate'));
       }
     )
     // Typing Watcher
@@ -378,6 +347,55 @@ class Chatter_User {
       //@ts-ignore
       this.dispatchEvent(new Event('TypingUpdate'));
     }, 5000);
+  }
+  private SetMessageListener () {
+    let { Server, Channel, Limit } = this, First: boolean = true;
+    // Message Listener
+    this.Message_Listeners.push(onSnapshot(
+      query(
+        collection(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages'),
+        orderBy('Created', 'asc'), 
+        ...(this.LastMsg ?  [ endBefore(this.LastMsg), limitToLast(Limit) ] : [ limitToLast(Limit) ])
+      ),
+      async (Server_Changes: QuerySnapshot) => {
+        if (First) {
+          if (Server_Changes.docs.reverse()[0])
+          this.LastMsg = Server_Changes.docs.reverse()[0];
+          First = false;
+        }
+        let Msgs: Map<string, { Time: number, Message: Msg }> = this.Messages;
+        Server_Changes.docChanges().forEach((msg: DocumentChange) => {
+          if (msg.type != 'removed') {
+            const Data: DocumentData = msg.doc.data();
+            console.log(msg.doc.id)
+            if (!Data.Created) Data.Created = Timestamp.now();
+            let Time: number = Data.Created.toMillis();
+            let messageInstance: Msg = new Msg(
+              doc(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages', msg.doc.id), 
+              msg.doc.id, 
+              Data.Content,
+              Data.Created,
+              Data.Owner,
+              Data.Picture,
+              Data.UID,
+              this
+            )
+            Msgs.set(msg.doc.id, { Time, Message: messageInstance });
+          } else Msgs.delete(msg.doc.id);
+        });
+        this.Messages = Msgs;
+        //@ts-ignore
+        this.dispatchEvent(new Event('MessageUpdate'));
+      }
+    ))
+  }
+  ScrollUp() {
+    this.SetMessageListener();
+  }
+  ScrollDown() {
+    if (!this.Message_Listeners[0]) return;
+    //@ts-ignore
+    this.Message_Listeners.pop()();
   }
   // General Functions
   Notification() {

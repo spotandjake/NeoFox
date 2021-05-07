@@ -15,7 +15,8 @@ module.exports = withBundleAnalyzer({
       'pbs.twimg.com',
       'lh3.googleusercontent.com',
       'storage.googleapis.com',
-      'united-rope-234818.appspot.com'
+      'united-rope-234818.appspot.com',
+      'avatars.githubusercontent.com'
     ],
   },
 });

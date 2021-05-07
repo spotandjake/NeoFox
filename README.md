@@ -1,8 +1,6 @@
 # NeoFox
 A Serverless React Based Chat Application Similar To Discord, Using Firebase.
 [REPL](https://replit.com/@Spotandjake/NeoFox)
-
-
 # HowTo
 To get the program runnning replace 
 ```js
@@ -18,12 +16,12 @@ const config = {
 };
 ```
 with your firebase config inside Firebase.ts
-replace ```
+replace 
+```js
 env: {
-    Storage_Url: 'https://storage.googleapis.com/united-rope-234818.appspot.com'
-  },
-``` with your storage url inside of next.env.d.ts
-
+  Storage_Url: 'https://storage.googleapis.com/united-rope-234818.appspot.com'
+},
+``` 
+with your storage url inside of next.env.d.ts
 runs on node 12 and above
 pls make a new node repl. this project uses firebase firestore for holding the messages and server and user data and firebase rtdb for typign indicators. it will soon use cloud functions for notifications and it uses firebase storage for file storage along with firebase analytics and performance.
-  

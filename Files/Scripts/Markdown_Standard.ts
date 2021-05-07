@@ -43,7 +43,7 @@ Prism.languages.insertBefore("markdown","prolog", {
         pattern: /^\`\`\`|\`\`\`/
       },
       language: {
-        pattern:/^[^\n]([^\s]*)\n/,
+        pattern:/^[^\s\n]+/,
       }
     }
   },

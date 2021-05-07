@@ -17,7 +17,13 @@ let Editor = (props: { User: Chatter_User }) => {
     />
   );
   return (
-    <section className={styles.Container}>
+    <section className={styles.Container} onKeyDown={(e) => {
+      if (e.key == "ArrowUp") {
+        props.User.ScrollUp();
+      } else if (e.key == "ArrowDown") {
+        props.User.ScrollDown();
+      }
+    }}>
       <Upload 
         User={props.User}
         Send={(Content: string) =>  props.User.Send(Content)}
