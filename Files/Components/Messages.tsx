@@ -8,42 +8,52 @@ type MyProps = { User: Chatter_User };
 type MyState = { Messages: any[] };
 class Messages extends React.Component<MyProps, MyState> {
   public state: MyState = { Messages: [] };
-  private Messge_Container: any = createRef();
+  private Message_Container: any = createRef();
+  private Loading_Message:  any = createRef();
+  private observer: any;
+  private Listener: { type: string, Key: number } | null = null;
   constructor(props: MyProps) {
     super(props);
   }
   Message_Listener() {
     let Scroll: boolean = false;
     if (
-      this.Messge_Container && this.Messge_Container.current && (
+      this.Message_Container && this.Message_Container.current && (
         ([...this.props.User.Messages.values()][0] && 
         [...this.props.User.Messages.values()][0].Message.UID == this.props.User.Id) ||
-        this.Messge_Container.current.scrollTop > -20
+        this.Message_Container.current.scrollTop > -20
       )
     ) Scroll = true;
     let messages = new Map([...this.props.User.Messages.entries()].sort((a, b) => b[1].Time-a[1].Time));
     this.setState({
       Messages: [...messages.values()].map((msg: any) => msg.Message.Render())
     });
-    if (Scroll) {
-      if (this.Messge_Container && this.Messge_Container.current)
-        this.Messge_Container.current.scrollTop = 0;
-    }
+    // if (Scroll) {
+    //   if (this.Message_Container && this.Message_Container.current)
+    //     this.Message_Container.current.scrollTop = 0;
+    // }
   }
   componentDidMount() {
-    this.props.User.addEventListener('MessageUpdate', this.Message_Listener.bind(this));
-    this.Message_Listener();
+    this.Listener = this.props.User.on('MessageUpdate', this.Message_Listener.bind(this));
+    // Deal with scroll Loader Coming into view
+    this.observer = new IntersectionObserver(([ target ]: any) => {
+      if (target.isIntersecting) this.props.User.ScrollUp();
+    }, {
+      root: this.Message_Container.current,
+      rootMargin: '20px',
+      threshold: 1.0
+    });
+    if (this.Loading_Message.current) this.observer.observe(this.Loading_Message.current)
   }
   componentWillUnmount() {
-    this.props.User.removeEventListener('MessageUpdate', this.Message_Listener.bind(this));
+    if (this.Listener) this.props.User.off(this.Listener);
+    this.observer.unobserve(this.Loading_Message.current);
   }
   render() {
     return (
-      <section 
-        ref={this.Messge_Container}
-        className={styles.Container}
-      >
+      <section className={styles.Container} ref={this.Message_Container}>
         {this.state.Messages}
+        <span className={styles.Loading} ref={this.Loading_Message} >Loading</span>
       </section>
     );
   }

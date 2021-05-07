@@ -1,8 +1,5 @@
-//@ts-ignore
 import React from 'react';
-//@ts-ignore
 import Message from '../Components/Message';
-//@ts-ignore
 import { auth, firestore, IUser, database } from './Firebase';
 import { 
   writeBatch,
@@ -22,23 +19,15 @@ import {
   DocumentData,
   query,
   limit,
-  limitToLast,
   orderBy,
   QuerySnapshot,
   DocumentChange,
   startAfter,
-  endBefore
-  //@ts-ignore
 } from 'firebase/firestore';
-//@ts-ignore
 import { ref, set, onValue } from 'firebase/database';
-//@ts-ignore
 import { signOut } from 'firebase/auth';
-//@ts-ignore
 import { getAnalytics, logEvent, Analytics } from 'firebase/analytics';
-//@ts-ignore
 import { getMessaging, FirebaseMessaging, getToken } from 'firebase/messaging';
-//@ts-ignore
 import { getPerformance, FirebasePerformance } from 'firebase/performance';
 
 let Handle_Error = (Message: string) => {
@@ -47,6 +36,7 @@ let Handle_Error = (Message: string) => {
   console.log('====================');
 }
 class Msg {
+  public Group: number;
   public Doc:    DocumentReference;
   public Id:      string;
   public Content: string;
@@ -57,6 +47,7 @@ class Msg {
 
   private User:   Chatter_User;
   constructor(
+    Group:   number,
     Doc:     DocumentReference,
     Id:      string,
     Content: string,
@@ -67,6 +58,7 @@ class Msg {
 
     User:    Chatter_User
   ) {
+    this.Group   = Group;
     this.Doc     = Doc;
     this.Id      = Id;
     this.Content = Content;
@@ -111,7 +103,7 @@ class Chatter_User {
   public Id: string;
   public Name: string;
   public Picture: string;
-  public Notifcations: boolean = false;
+  public Notifications: boolean = false;
   public Servers: Map<string, string> = new Map();
 
   public Server: { Name: string, Id: string, Channels: Map<string, string> } = { 
@@ -135,17 +127,15 @@ class Chatter_User {
   private TypingInterval:  number      | null = null;
 
   private Message_Listeners:  Unsubscribe[] = [];
-  private Limit: number = 3;
-  private LastMsg: DocumentReference | null = null;
+  private Limit: number = 20;
   // Random
   private Type_Interval: number = 0;
   private listeners: { [type: string]: Array<Callback> } = {};
+  private Smart_Listener: { [type: string]: Map<number, Callback> } = {};
   constructor(User: IUser) {
     // Ser Public Vars
     this.Id = User.uid;
-    //@ts-ignore
     this.Name = User.displayName;
-    //@ts-ignore
     this.Picture = User.photoURL;
     // Set Private Vars
     this.User = User;
@@ -156,8 +146,18 @@ class Chatter_User {
 
     this.SetListeners();
   }
-  // Event Listner
-  addEventListener (type: string, callback: Callback) {
+  on(type: string, callback: Callback): { type: string, Key: number } {
+    if (!(type in this.Smart_Listener)) this.Smart_Listener[type] = new Map();
+    let Key: number = Math.floor(Math.random() * Date.now());
+    this.Smart_Listener[type].set(Key, callback);
+    return { type, Key };
+  }
+  off({ type, Key }: { type: string, Key: number }): void {
+    if (!(type in this.Smart_Listener && this.Smart_Listener[type].has(Key))) return;
+    this.Smart_Listener[type].delete(Key);
+  }
+  // Event Listener
+  addEventListener (type: string, callback: Callback): void {
     if (!(type in this.listeners)) this.listeners[type] = [];
     this.listeners[type].push(callback);
   }
@@ -173,15 +173,22 @@ class Chatter_User {
     }
   }
   dispatchEvent (event: Event) {
-    if (!(event.type in this.listeners)) return true;
-    const stack = this.listeners[event.type].slice();
-    // tslint:disable-next-line one-variable-per-declaration
-    for (let i = 0, l = stack.length; i < l; i++) {
-      stack[i].call(this, event);
+    if (!(event.type in this.listeners || event.type in this.Smart_Listener)) return true;
+    if (event.type in this.Smart_Listener) {
+      const stack = this.Smart_Listener[event.type].values();
+      for (const callback of stack) { callback(event) }
+    }
+    // Old Implementation here for compat
+    if (event.type in this.listeners) {
+      const stack = this.listeners[event.type].slice();
+      // tslint:disable-next-line one-variable-per-declaration
+      for (let i = 0, l = stack.length; i < l; i++) {
+        stack[i].call(this, event);
+      }
     }
     return !event.defaultPrevented;
   }
-  // Destory
+  // Destroy
   destroy() {
     if (this.UserListener) this.UserListener();
     if (this.ServerListener) this.ServerListener();
@@ -196,12 +203,10 @@ class Chatter_User {
     if (!(this.Servers.has(Server_Id) || Server_Id == 'Settings')) return;
     localStorage.setItem('Server', Server_Id);
     this.Server = {
-      //@ts-ignore
-      Name: this.Servers.get(Server_Id),
+      Name: (this.Servers.get(Server_Id) as string),
       Id: Server_Id,
       Channels: new Map()
     }
-    //@ts-ignore
     if (Server_Id == 'Settings') return this.dispatchEvent(new Event('ActiveUpdate'));
     // Call A Channel Listener
     this.SetServerListener();
@@ -209,11 +214,9 @@ class Chatter_User {
   ActiveChannel (Channel_Id: string) {
     if (!this.Server.Channels.has(Channel_Id)) return;
     this.Channel = { 
-      //@ts-ignore
-      Name: this.Server.Channels.get(Channel_Id),
+      Name: (this.Server.Channels.get(Channel_Id) as string),
       Id: Channel_Id
     }
-    //@ts-ignore
     this.dispatchEvent(new Event('ActiveUpdate'));
     this.Message_Listeners.forEach((Remove: Unsubscribe) => Remove());
     this.Message_Listeners = [];
@@ -232,12 +235,12 @@ class Chatter_User {
     let { Id } = this;
     // Make the user a profile with the basic server
     let Server_Info = async (Server_ID: string)  => {
-      let Serv = await getDoc(
+      let Server = await getDoc(
         doc(firestore, 'Servers', Server_ID)
       ).catch(() => ({ exists: () => false }));
       return {
-        Name: Serv.exists() ? Serv.data().Name : null,
-        Banned: !Serv.exists() ? true : false
+        Name: Server.exists() ? Server.data().Name : null,
+        Banned: !Server.exists() ? true : false
       }
     }
     let SID = 'UUw40MdRDcUxdEy00Zuo';
@@ -246,11 +249,11 @@ class Chatter_User {
       updateDoc(
         doc(firestore, 'Users', Id),
         { Servers: { [SID]: Data.Name } }
-      ).catch(err => {
+      ).catch(() => {
         setDoc(
           doc(firestore, 'Users', Id),
           { Servers: { [SID]: Data.Name } }
-        ).catch(err => { Handle_Error(err)});
+        ).catch((err: string) => { Handle_Error(err)});
       });
     }
   }
@@ -262,17 +265,15 @@ class Chatter_User {
       doc(firestore, 'Users', Id), { includeMetadataChanges: true }, 
       async (User: DocumentSnapshot) => {
         if (User.exists()) {
-          let Data: any = User.data(), { Servers } = Data;
+          let Data: DocumentData = User.data(), { Servers } = Data;
           if (User.metadata.hasPendingWrites || !Data || !Servers) return;
           // Determine Current Server And Active
-          //@ts-ignore
           this.Servers = new Map(Object.entries(Servers));
           if (this.Server.Name == '') {
             let Server: string | null = localStorage.getItem('Server');
             let Active_Server: string = (Server && Servers[Server]) ? Server : Object.keys(Servers)[0];
             this.ActiveServer(Active_Server)
           }
-           //@ts-ignore
           this.dispatchEvent(new Event('UserUpdate'));
         } else this.NewUser();
       }
@@ -284,7 +285,7 @@ class Chatter_User {
     this.ServerListener = onSnapshot(doc(firestore, 'Servers', Server.Id), 
       async (Server_Snap: DocumentSnapshot) => {
         if (Server_Snap.exists()) {
-          let Data: any = Server_Snap.data(), { Channels, Name } = Data;
+          let Data: DocumentData = Server_Snap.data(), { Channels, Name }: { Channels: { [key: string]: string }, Name: string } = Data;
           if (!Data || !Channels || !Name) return;
           if (Name != this.Servers.get(Server.Id)) {
             updateDoc(
@@ -292,17 +293,14 @@ class Chatter_User {
               { Servers: { [Server.Id]: Name } }
             )
           }
-           //@ts-ignore
-          let ServArr: string[][2] = Object.entries(Channels).sort((a: string[2], b: string[2]) => a[0].localeCompare(b[0]));
-           //@ts-ignore
-          ServArr.forEach(([ Key, Id ], i: number) => {
+          let Servers: [string, string][] = Object.entries(Channels).sort((a: [string , string ], b: [string , string ]) => a[0].localeCompare(b[0]));
+          Servers.forEach(([ Key, Id ], i: number) => {
             this.Server.Channels.set(Id, Key.replace(/([^_]*)_/, ''));
             if (i == 0 && First) {
               this.ActiveChannel(Id);
               First = false;
             }
           });
-           //@ts-ignore
           this.dispatchEvent(new Event('ServerUpdate'));
         }
       }
@@ -314,7 +312,7 @@ class Chatter_User {
     this.PermsListener = onSnapshot(doc(firestore, 'Servers', Server.Id, 'Users', Id), 
       async (Server_Snap: DocumentSnapshot) => {
         if (Server_Snap.exists()) {
-          let Data: any = Server_Snap.data();
+          let Data: DocumentData = Server_Snap.data();
           if (Data.Permissions) this.Perms = Data.Permissions;
         }
       }
@@ -331,7 +329,6 @@ class Chatter_User {
             if (Date.now() - Time< 5000) this.Typers.set(name, { Name: username, Time });
             else if (this.Typers.has(name)) this.Typers.delete(name);
           });
-          //@ts-ignore
           this.dispatchEvent(new Event('TypingUpdate'));
         }
       }
@@ -341,36 +338,31 @@ class Chatter_User {
     this.TypingInterval = setInterval(() => {
       [...this.Typers.keys()].forEach((Id: string) => {
         let Value = this.Typers.get(Id);
-        //@ts-ignore
-        if (Date.now() - Value.Time< 5000) this.Typers.delete(Id);
+        if (Value && Date.now() - Value.Time< 5000) this.Typers.delete(Id);
       });
-      //@ts-ignore
       this.dispatchEvent(new Event('TypingUpdate'));
     }, 5000);
   }
   private SetMessageListener () {
-    let { Server, Channel, Limit } = this, First: boolean = true;
+    let { Server, Channel, Limit } = this, Group: number = this.Message_Listeners.length;
+    let LastMsg = [...this.Messages.values()].sort((a, b) => a.Time-b.Time)[0];
     // Message Listener
     this.Message_Listeners.push(onSnapshot(
       query(
         collection(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages'),
-        orderBy('Created', 'asc'), 
-        ...(this.LastMsg ?  [ endBefore(this.LastMsg), limitToLast(Limit) ] : [ limitToLast(Limit) ])
+        orderBy('Created', 'desc'), 
+        ...(LastMsg ?  [ startAfter(LastMsg.Message.Created)] : [ ]),
+        limit(Limit)
       ),
       async (Server_Changes: QuerySnapshot) => {
-        if (First) {
-          if (Server_Changes.docs.reverse()[0])
-          this.LastMsg = Server_Changes.docs.reverse()[0];
-          First = false;
-        }
         let Msgs: Map<string, { Time: number, Message: Msg }> = this.Messages;
         Server_Changes.docChanges().forEach((msg: DocumentChange) => {
           if (msg.type != 'removed') {
             const Data: DocumentData = msg.doc.data();
-            console.log(msg.doc.id)
             if (!Data.Created) Data.Created = Timestamp.now();
             let Time: number = Data.Created.toMillis();
             let messageInstance: Msg = new Msg(
+              Group,
               doc(firestore, 'Servers', Server.Id, 'Channels', Channel.Id, 'Messages', msg.doc.id), 
               msg.doc.id, 
               Data.Content,
@@ -384,23 +376,26 @@ class Chatter_User {
           } else Msgs.delete(msg.doc.id);
         });
         this.Messages = Msgs;
-        //@ts-ignore
         this.dispatchEvent(new Event('MessageUpdate'));
-      }
+      },
+      (err: string) => Handle_Error(err)
     ))
   }
   ScrollUp() {
     this.SetMessageListener();
   }
   ScrollDown() {
-    if (!this.Message_Listeners[0]) return;
-    //@ts-ignore
+    if (!this.Message_Listeners.length || this.Message_Listeners.length == 1) return;
     this.Message_Listeners.pop()();
+    [...this.Messages.entries()].forEach(([ Key, { Time, Message } ]) => {
+      if (Message.Group == this.Message_Listeners.length) this.Messages.delete(Key);
+    });
+    this.dispatchEvent(new Event('MessageUpdate'));
   }
   // General Functions
   Notification() {
-    let { Notifcations, Messaging, Id } = this;
-    if (!Notifcations) {
+    let { Notifications, Messaging, Id } = this;
+    if (!Notifications) {
       Notification.requestPermission().then((result: string) => {
         let Allowed = (result == 'granted' || result == 'default');
         if (Allowed) {
@@ -422,7 +417,7 @@ class Chatter_User {
   }
   async Send(Content: string) {
     let { Id, Name, Picture, Server, Channel } = this;
-    // Send batch related to ratelimiting
+    // Send as batch make sure they write to both to add a basic form of rate limiting
     let batch: WriteBatch = writeBatch(firestore);
     batch.set(
       doc(
