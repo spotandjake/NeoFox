@@ -201,6 +201,39 @@ class Chatter_User {
     if (this.TypingListener) this.TypingListener();
     if (this.TypingInterval) clearInterval(this.TypingInterval);
   }
+  // Server Managment
+  async JoinServer(ServerId: string): Promise<string> {
+    let { Id } = this;
+    // TODO: Improve this
+    let Server = await getDoc(
+      doc(firestore, 'Servers', ServerId)
+    ).catch(() => ({ exists: () => false }));
+    let Data = {
+      Name: Server.exists() ? Server.data().Name : null,
+      Banned: !Server.exists() ? true : false
+    }
+    if (!Data.Banned) {
+      updateDoc(
+        doc(firestore, 'Users', Id),
+        { Servers: { [ServerId]: Data.Name } }
+      ).catch(() => {
+        setDoc(
+          doc(firestore, 'Users', Id),
+          { Servers: { [ServerId]: Data.Name } }
+        ).catch((err: string) => { Handle_Error(err)});
+      });
+      // TODO: Make this More Specific
+      return 'Success';
+    } else {
+      // TODO: Make this error more specific
+      return 'Either The Server Does Not Exist or U have benn banned';
+    }
+    // TODO: add the user to the servers user list also make sure that the user has added themselves through security rules
+  }
+  async LeaveServer(ServerId: string): Promise<string> {
+    
+    return '';
+  }
   // Setters 
   ActiveServer (Server_Id: string) {
     if (!(this.Servers.has(Server_Id) || Server_Id == 'Settings')) return;
@@ -235,30 +268,8 @@ class Chatter_User {
     this.ActiveChannel(Channel_Id);
   }
   private async NewUser() {
-    let { Id } = this;
-    // Make the user a profile with the basic server
-    let Server_Info = async (Server_ID: string)  => {
-      let Server = await getDoc(
-        doc(firestore, 'Servers', Server_ID)
-      ).catch(() => ({ exists: () => false }));
-      return {
-        Name: Server.exists() ? Server.data().Name : null,
-        Banned: !Server.exists() ? true : false
-      }
-    }
-    let SID = 'UUw40MdRDcUxdEy00Zuo';
-    let Data = await Server_Info(SID);
-    if (!Data.Banned) {
-      updateDoc(
-        doc(firestore, 'Users', Id),
-        { Servers: { [SID]: Data.Name } }
-      ).catch(() => {
-        setDoc(
-          doc(firestore, 'Users', Id),
-          { Servers: { [SID]: Data.Name } }
-        ).catch((err: string) => { Handle_Error(err)});
-      });
-    }
+    // Join the general server
+    this.JoinServer('UUw40MdRDcUxdEy00Zuo');
   }
   // Set out listeners
   private SetListeners() {
@@ -278,7 +289,9 @@ class Chatter_User {
             this.ActiveServer(Active_Server)
           }
           this.dispatchEvent(new Event('UserUpdate'));
-        } else this.NewUser();
+        } 
+        // Only call this on first login let the user leave servers and what not
+        else this.NewUser();
       }
     )
   }

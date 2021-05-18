@@ -37,6 +37,8 @@ Priority
 - [ ] Finalize Light Theme
 - [ ] Move images off of nextjs and onto a cdn -- Setup Our Own
 - [ ] Bot api
+- [ ] Allow users to provide there own backends to handle message storage
+- [ ] Create a admin pannel for developement
 Come Back Too
 ====================
 - [ ] make editor md multiple line capable.

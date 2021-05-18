@@ -7,7 +7,7 @@ import Chatter_User from '../Scripts/Chatter';
 type MyProps = { User: Chatter_User };
 const Settings = (props: MyProps) => {
   const [ Content, setContent ] = useState<JSX.Element>(<></>);
-  const CheckBox = useRef<HTMLInputElement>(null), NotifBox = useRef<HTMLInputElement>(null), [ Servers, setServers ] = useState<JSX.Element[]>([]);
+  const CheckBox = useRef<HTMLInputElement>(null), NotifBox = useRef<HTMLInputElement>(null), ServerCode = useRef<HTMLInputElement>(null), [ Servers, setServers ] = useState<JSX.Element[]>([]);
   useEffect(() => {
     let UserUpdate = () => {
       if (NotifBox)
@@ -86,7 +86,31 @@ const Settings = (props: MyProps) => {
       </div>
       <div className={styles.Servers}>
         <h2>Servers</h2>
-        <div>{Servers}</div>
+        <div className={styles.ServerContent}>
+          <div>{Servers}</div>
+          <div className={styles.ServerBtns}>
+            <div className={styles.Button} onClick={(() => props.User.logout())}>
+              <span className={styles.Center}>Create Server</span>
+            </div>
+            <div className={styles.Input}>
+              <input type="text" placeholder="Please Enter Code" ref={ServerCode}/>
+              <div 
+                className={styles.Button} 
+                onClick={async () => {
+                  if (ServerCode.current && ServerCode.current.value) {
+                    let Result: string = await props.User.JoinServer(ServerCode.current.value);
+                    alert(Result);
+                  } else {
+                    // TODO: Make a nice gui 
+                    alert("Please Fill out the Code");
+                  }
+                }}
+              >
+                <span className={styles.Center}>Join Server</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       {Content}
     </section>

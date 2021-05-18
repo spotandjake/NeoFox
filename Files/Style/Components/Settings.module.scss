@@ -60,6 +60,8 @@
   display: grid;
   grid-template-rows: max-content auto;
   > div {
+    display: grid;
+    grid-template-rows: auto max-content;
     height: 100%;
     width: 100%;
     padding: 1rem;
@@ -82,6 +84,15 @@
         font-size: 1rem;
         line-height: 2;
       }
+    }
+    .Button {
+      @include Mixins.Button(
+        var(--Color-Background-2),
+        var(--Color-Text-4),
+        var(--Color-Background-1)
+      );
+      margin: 0 !important;
+      width: 100% !important;
     }
   }
 }
@@ -161,4 +172,13 @@
   width: 100%;
   margin-bottom: .5rem;
   text-decoration: none;
+}
+.Input {
+  display: grid;
+  grid-template-columns: auto max-content;
+  & .Button {
+    border-radius: 0 .25rem .25rem 0 !important;
+    padding: 0.625rem !important;
+    margin: 0 !important;
+  }
 }
