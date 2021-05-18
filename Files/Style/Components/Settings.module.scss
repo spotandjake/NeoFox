@@ -184,3 +184,12 @@
     margin: 0 !important;
   }
 }
+// Icon
+.Icon {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  margin-left: auto;
+}
+.Icon:hover {
+  transform: scale(1.1);
+}

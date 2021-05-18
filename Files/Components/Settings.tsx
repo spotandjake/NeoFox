@@ -33,6 +33,20 @@ const Settings = (props: MyProps) => {
                 />
               </div>
               <h1>{Name}</h1>
+              <div 
+                className={styles.Icon}
+                onClick={() => {
+                  props.User.LeaveServer(Id);
+                }}
+              >
+                <Image
+                  src={'/Icons/Leave.svg'}
+                  alt={'Leave'}
+                  layout="responsive"
+                  width={40}
+                  height={40}
+                />
+              </div>
             </div>
           );
         })
@@ -58,6 +72,20 @@ const Settings = (props: MyProps) => {
             />
           </div>
           <h1>{props.User.Name}</h1>
+          <div 
+            className={styles.Icon}
+            onClick={() => {
+              props.User.logout();
+            }}
+          >
+            <Image
+              src={'/Icons/Logout.svg'}
+              alt={'Logout'}
+              layout="responsive"
+              width={40}
+              height={40}
+            />
+          </div>
         </div>
          <h2>Preferences</h2>
          <div className={styles.Card}>
@@ -93,9 +121,6 @@ const Settings = (props: MyProps) => {
         >
           <span className={styles.Center}>Report Bug</span>
         </a>
-        <div className={styles.Button} onClick={(() => props.User.logout())}>
-          <span className={styles.Center}>Logout</span>
-        </div>
       </div>
       <div className={styles.Servers}>
         <h2>Servers</h2>

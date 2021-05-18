@@ -23,6 +23,7 @@ import {
   QuerySnapshot,
   DocumentChange,
   startAfter,
+  deleteField
 } from 'firebase/firestore';
 import { ref, set, onValue } from 'firebase/database';
 import { signOut } from 'firebase/auth';
@@ -231,8 +232,17 @@ class Chatter_User {
     // TODO: add the user to the servers user list also make sure that the user has added themselves through security rules
   }
   async LeaveServer(ServerId: string): Promise<string> {
-    
-    return '';
+    let { Id } = this;
+    // TODO: imporve this make sure they leave the actual server members area as well on the server
+    // Debate deleting all there msgs on the server
+    await updateDoc(
+      doc(firestore, 'Users', Id),
+      { [`Servers.${ServerId}`]: deleteField() }
+    ).catch(() => {
+      Handle_Error('Failed to Leave the Server');
+      return 'Failed to Leave the Server';
+    })
+    return 'Success';
   }
   // Setters 
   ActiveServer (Server_Id: string) {
@@ -289,7 +299,7 @@ class Chatter_User {
             this.ActiveServer(Active_Server)
           }
           this.dispatchEvent(new Event('UserUpdate'));
-        } 
+        }
         // Only call this on first login let the user leave servers and what not
         else this.NewUser();
       }
