@@ -73,10 +73,11 @@
       padding: .5rem;
       border-radius: 1rem;
       background: var(--Color-Background-1);
-      img, picture {
+      & > .ServerPicture {
         height: 2rem;
         width: 2rem;
         border-radius: 50%;
+        overflow: hidden;
       }
       h1 {
         margin: 0;
@@ -104,17 +105,18 @@
   margin-bottom: .5rem;
   border-radius: 1rem;
   background: var(--Color-Background-6);
-  &> h1 {
+  & > h1 {
     overflow: hidden;
     font-size: 1.75rem;
     margin: 0;
     margin-left: 1rem;
     user-select: none;
   }
-  img, picture {
+  & > .ProfilePicture {
     height: 2rem;
     width: 2rem;
     border-radius: 50%;
+    overflow: hidden;
   }
   .Center {
     text-align: center;

@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import styles from './../Style/Components/Settings.module.scss';
 
 import Chatter_User from '../Scripts/Chatter';
+import Image from 'next/image';
 
 type MyProps = { User: Chatter_User };
 const Settings = (props: MyProps) => {
@@ -22,9 +23,15 @@ const Settings = (props: MyProps) => {
           let Name = Servers.get(Id);
           return (
             <div className={styles.Server} key={i}>
-              <picture>
-                <img alt={Name} src={`${process.env.Storage_Url}/Servers/${Id}/Icon`} />
-              </picture>
+              <div className={styles.ServerPicture}>
+                <Image
+                  src={`${process.env.Storage_Url}/Servers/${Id}/Icon`}
+                  alt={Name}
+                  layout="responsive"
+                  width={40}
+                  height={40}
+                />
+              </div>
               <h1>{Name}</h1>
             </div>
           );
@@ -41,9 +48,15 @@ const Settings = (props: MyProps) => {
       <div>
         <h2>Account</h2>
         <div className={styles.Card}>
-          <picture>
-            <img alt={props.User.Name || 'Unkown'} src={props.User.Picture || ''} />
-          </picture>
+          <div className={styles.ProfilePicture}>
+            <Image
+              src={props.User.Picture}
+              alt={props.User.Name}
+              layout="responsive"
+              width={32}
+              height={32}
+            />
+          </div>
           <h1>{props.User.Name}</h1>
         </div>
          <h2>Preferences</h2>
