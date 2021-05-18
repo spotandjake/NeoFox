@@ -29,6 +29,10 @@ Done
 - [x] Add ability to scroll up
 Priority
 ====================
+- [ ] Extend settings page
+  - [ ] add ability to leave Servers
+  - [ ] add ability to create Servers
+  - [ ] add ability to manage people in your server
 - [ ] on scroll down hide msgs
 - [ ] add server settings, UI
 - [ ] Add In Pofile Pages, UI
