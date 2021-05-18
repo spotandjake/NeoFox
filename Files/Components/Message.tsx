@@ -52,7 +52,7 @@ const Message = (props: MyProps) => {
         <div className={styles.Content} ref={Parsed_Content}>
           <Markdown MD={props.Content} User={props.Self}/>
         </div>
-        <span className={styles.Author}>{ props.Username } • { new Date(props.Time).toLocaleString() }</span>
+        <span className={styles.Author}>{ props.Username } • { new Date(props.Time).toLocaleString([], {hour: '2-digit', minute:'2-digit'}) }</span>
       </div>
       <ContextMenu target={contextMenuContainerRef} items={items} />
     </>
