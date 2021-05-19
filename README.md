@@ -2,7 +2,7 @@
 A Serverless React Based Chat Application Similar To Discord, Using Firebase.
 [REPL](https://replit.com/@Spotandjake/NeoFox)
 # HowTo
-To get the program runnning replace: 
+To get the program running replace: 
 ```js
 const config = {
   apiKey: 'AIzaSyBCpFkdcCLQ9r_rO-R-LquOPDlLK3WG20s',
