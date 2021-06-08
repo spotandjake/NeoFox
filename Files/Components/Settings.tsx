@@ -38,6 +38,7 @@ const Settings = (props: MyProps) => {
                 onClick={() => {
                   props.User.LeaveServer(Id);
                 }}
+                title="Leave Server"
               >
                 <Image
                   src={'/Icons/Leave.svg'}
@@ -77,6 +78,7 @@ const Settings = (props: MyProps) => {
             onClick={() => {
               props.User.logout();
             }}
+            title="logout"
           >
             <Image
               src={'/Icons/Logout.svg'}

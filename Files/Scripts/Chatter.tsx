@@ -37,9 +37,9 @@ let Handle_Error = (Message: string) => {
   console.log('====================');
 }
 class Msg {
-  public Group:  number;
-  public local:  boolean;
-  public Doc:    DocumentReference;
+  public Group:   number;
+  public local:   boolean;
+  public Doc:     DocumentReference;
   public Id:      string;
   public Content: string;
   public Created: Timestamp;
