@@ -1,6 +1,6 @@
 # NeoFox
 A Serverless React Based Chat Application Similar To Discord, Using Firebase.
-[REPL](https://replit.com/@Spotandjake/NeoFox)
+[View on Replit](https://replit.com/@Spotandjake/NeoFox)
 # HowTo
 To get the program running replace: 
 ```js
