@@ -21,6 +21,7 @@ const Settings = (props: MyProps) => {
       setServers(
         [...Servers.keys()].map((Id: string, i: number) => {
           let Name = Servers.get(Id);
+          if (Name == undefined) throw new Error('Server is undefined');
           return (
             <div className={styles.Server} key={i}>
               <div className={styles.ServerPicture}>

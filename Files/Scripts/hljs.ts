@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 // Core import
 import hljs from 'highlight.js/lib/core';
 // Languages import

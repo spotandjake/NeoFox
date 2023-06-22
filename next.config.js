@@ -3,10 +3,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 module.exports = withBundleAnalyzer({
-  future: {
-    webpack5: true,
-    modern: true,
-  },
   env: {
     Storage_Url: 'https://storage.googleapis.com/united-rope-234818.appspot.com'
   },

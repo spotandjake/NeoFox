@@ -15,17 +15,14 @@
     "jest": "^26.6.3",
     "next": "latest",
     "prismjs": "^1.23.0",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-device-detect": "^1.17.0",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "sass": "^1.32.11",
     "slate": "^0.62.0",
     "slate-history": "^0.62.0",
     "slate-react": "^0.62.0",
     "typescript": "^4.2.4"
-  },
-  "resolutions": {
-    "immer": "8.0.1"
   },
   "devDependencies": {
     "@firebase/app-types": "^0.6.2",

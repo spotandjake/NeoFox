@@ -18,7 +18,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "downlevelIteration": true,
-    "types": []
+    "types": [],
+    "incremental": true
   },
   "exclude": [
     "node_modules",
