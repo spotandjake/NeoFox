@@ -7,7 +7,7 @@ module.exports = withBundleAnalyzer({
     Storage_Url: 'https://storage.googleapis.com/united-rope-234818.appspot.com'
   },
   output: "export",
-  basePath: "/Neofox",
+  basePath: "/NeoFox",
   images: {
     // You can re-enable this if you are not using a static export
     unoptimized: true,
