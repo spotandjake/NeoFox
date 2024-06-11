@@ -42,7 +42,7 @@ const Settings = (props: MyProps) => {
                 title="Leave Server"
               >
                 <Image
-                  src={'/Icons/Leave.svg'}
+                  src={'/NeoFox/Icons/Leave.svg'}
                   alt={'Leave'}
                   layout="responsive"
                   width={40}
@@ -82,7 +82,7 @@ const Settings = (props: MyProps) => {
             title="logout"
           >
             <Image
-              src={'/Icons/Logout.svg'}
+              src={'/NeoFox/Icons/Logout.svg'}
               alt={'Logout'}
               layout="responsive"
               width={40}

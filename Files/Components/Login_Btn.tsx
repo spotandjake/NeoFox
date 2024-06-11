@@ -18,15 +18,15 @@ const Button = (props: MyProps) => {
   switch(Type) {
     case 'Google':
       Auth = new GoogleAuthProvider();
-      Img = '/Images/Google.svg';
+      Img = '/NeoFox/Images/Google.svg';
       break;
     case 'Github':
       Auth = new GithubAuthProvider();
-      Img = '/Images/Github.png';
+      Img = '/NeoFox/Images/Github.png';
       break;
     case 'Twitter':
       Auth = new TwitterAuthProvider();
-      Img = '/Images/Twitter.svg';
+      Img = '/NeoFox/Images/Twitter.svg';
       Style.push(styles.Twitter);
       break;
   }
