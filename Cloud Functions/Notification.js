@@ -1,3 +1,9 @@
+/**
+ * This is a test implementation of a notification system, using firebase cloud functions.
+ * As this would cost money to run it is currently not deployed.
+ * 
+ * This implementation is more of an example annd is not complete as such it can only ping me.
+ */
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
@@ -13,7 +19,7 @@ exports.Notifcation = functions.firestore
       title: `${snapshot.data().Owner} Said:`,
       body: text ? (text.length <= 100 ? text : `${text.substring(0, 97)}...`) : '',
       icon: snapshot.data().Picture,
-      click_action: 'https://neofox.spotandjake.repl.co/',
+      click_action: 'https://spotandjake.github.io/NeoFox',
     }
   };
   let Pings = [ 'mHvcak8OjqZglBlENhQSLqBOgPB3' ];
