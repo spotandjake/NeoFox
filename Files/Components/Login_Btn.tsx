@@ -7,7 +7,7 @@ import {
   GoogleAuthProvider,
   GithubAuthProvider,
   TwitterAuthProvider,
-  signInWithRedirect
+  signInWithPopup
 } from 'firebase/auth';
 
 type Provider = 'Google' | 'Github' | 'Twitter';
@@ -31,7 +31,7 @@ const Button = (props: MyProps) => {
       break;
   }
   return (
-    <div className={Style.join(' ')} onClick={() => (signInWithRedirect(auth, Auth))}>
+    <div className={Style.join(' ')} onClick={() => (signInWithPopup(auth, Auth))}>
       <div>
         <picture>
           <img alt={Type} src={Img} width="18" height="18" />
